@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Universal Travel Adapter | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script src="../../script.js" defer></script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Universal Travel Adapter</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/electronics/Universal Travel Adapter/universal-travel-adapter-35W.jpg" alt="Universal Travel Adapter 35W">
+    </div>
+
+    <div class="product-info">
+      <h2 id="price">$29.99</h2>
+
+      <label for="variant">Choose Power Output:</label>
+      <select id="variant" onchange="updateTravelAdapter()">
+        <option value="35W">35W (Basic)</option>
+        <option value="75W">75W (High-Speed)</option>
+        <option value="100W">100W (Pro Travel)</option>
+      </select>
+
+      <p id="description">
+        Compact 35W adapter that works globally. Ideal for phones and smaller devices while traveling.
+      </p>
+
+      <ul>
+        <li>Compatible with US, UK, EU, AU plugs</li>
+        <li>Multiple USB ports + universal AC socket</li>
+        <li>Surge protection and safety shutters</li>
+        <li>Compact, durable, and TSA-approved</li>
+        <li>LED power indicator</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('traveladapter')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Charged all my devices across Europe and Asia. Highly recommend!” — Priya G.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Compact and works great. Good price too.” — Blake R.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const variants = {
+      "35W": {
+        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-35W.jpg",
+        price: "$29.99",
+        desc: "Compact 35W adapter that works globally. Ideal for phones and smaller devices while traveling.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Charged all my devices across Europe and Asia. Highly recommend!” — Priya G.",
+          "⭐️⭐️⭐️⭐️ “Compact and works great. Good price too.” — Blake R."
+        ]
+      },
+      "75W": {
+        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-75W.jpg",
+        price: "$39.99",
+        desc: "The 75W version includes faster USB ports—perfect for tablets and dual-device charging.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Used this to charge my iPad and camera in Italy. Very reliable.” — Hannah T.",
+          "⭐️⭐️⭐️⭐️ “More powerful than expected. Handy for groups.” — Nick A."
+        ]
+      },
+      "100W": {
+        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-100W.jpg",
+        price: "$49.99",
+        desc: "The Pro 100W version is built for power users. Charge laptops, tablets, and phones simultaneously with blazing speed.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Charged my MacBook Air, phone, and GoPro all at once. Absolutely essential.” — Kevin Z.",
+          "⭐️⭐️⭐️⭐️ “Premium performance and worth every penny. Travel must-have.” — Sofia L."
+        ]
+      }
+    };
+
+    function updateTravelAdapter() {
+      const selection = document.getElementById("variant").value;
+      const info = variants[selection];
+
+      document.getElementById("productImage").src = info.img;
+      document.getElementById("productImage").alt = `Universal Travel Adapter ${selection}`;
+      document.getElementById("price").textContent = info.price;
+      document.getElementById("description").textContent = info.desc;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      info.reviews.forEach(r => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${r.split(" “")[0]}</strong> “${r.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

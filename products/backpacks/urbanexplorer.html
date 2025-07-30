@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urban Explorer Slim Laptop Backpack | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Urban Explorer Slim Laptop Backpack</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/backpacks/UrbanExplorer/urbanexplorer_black.jpg" alt="Urban Explorer Black">
+    </div>
+
+    <div class="product-info">
+      <h2>$74.99</h2>
+
+      <label for="variant">Choose Color:</label>
+      <select id="variant" onchange="updateVariant()">
+        <option value="black">Black</option>
+        <option value="green">Green</option>
+      </select>
+
+      <p id="description">The perfect companion for the urban professional or student. The Urban Explorer Slim Laptop Backpack combines minimalist design with modern functionality, keeping your essentials organized without unnecessary bulk.</p>
+
+      <ul>
+        <li>Fits laptops up to 17"</li>
+        <li>USB charging port and cable management sleeve</li>
+        <li>Anti-theft hidden zipper system</li>
+        <li>Water-resistant and lightweight</li>
+        <li>Front pocket, key holder, and pen organizer</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('urbanexplorer')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Stylish, practical, and really well built. Great for commuting!” — Carlos M.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Sleek design and fits perfectly under airplane seats. Great value.” — Priya S.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const productData = {
+      black: {
+        img: "../../images/backpacks/UrbanExplorer/urbanexplorer_black.jpg",
+        alt: "Urban Explorer Black",
+        description: "The perfect companion for the urban professional or student. The Urban Explorer Slim Laptop Backpack combines minimalist design with modern functionality, keeping your essentials organized without unnecessary bulk.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Stylish, practical, and really well built. Great for commuting!” — Carlos M.",
+          "⭐️⭐️⭐️⭐️ “Sleek design and fits perfectly under airplane seats. Great value.” — Priya S."
+        ]
+      },
+      green: {
+        img: "../../images/backpacks/UrbanExplorer/urbanexplorer_green.jpg",
+        alt: "Urban Explorer Green",
+        description: "Add a touch of bold color to your daily commute with the green edition of the Urban Explorer. Same great storage and security with a sleek green finish.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “I love the green color—it stands out but still looks professional.” — Hannah W.",
+          "⭐️⭐️⭐️⭐️ “Nice backpack with a surprising amount of room. The USB feature is handy.” — Omar L."
+        ]
+      }
+    };
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = productData[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

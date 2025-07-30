@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foldable Shoe Pouch Organizer | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+      const variantSelect = document.getElementById("variant");
+      const productImage = document.getElementById("product-image");
+      const price = document.getElementById("price");
+      const description = document.getElementById("description");
+      const reviewsContainer = document.getElementById("reviews");
+
+      const variants = {
+        grey: {
+          img: "../../images/organizers/Shoe Pouch/shoe-pouch-grey.jpg",
+          price: "$12.99",
+          desc: "A classic grey shoe pouch that keeps footwear neatly separated from clean clothes. Folds flat and fits easily in carry-ons.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Perfect for organizing shoes without dirtying my clothes. Lightweight and neat!", author: "Tanya L." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Took this to Spain and used it every day. Great size and folds up nicely.", author: "Omar G." }
+          ]
+        },
+        red: {
+          img: "../../images/organizers/Shoe Pouch/shoe-pouch-red.jpg",
+          price: "$12.99",
+          desc: "Stand out with this bold red travel shoe pouch. Water-resistant and breathable — ideal for sporty or stylish trips.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Love the color! It’s easy to find in my bag and keeps things fresh.", author: "Marina T." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Stylish and super practical. Red looks great with the rest of my travel gear.", author: "Kris V." }
+          ]
+        }
+      };
+
+      function updateContent(selected) {
+        const variant = variants[selected];
+        productImage.src = variant.img;
+        price.textContent = variant.price;
+        description.textContent = variant.desc;
+
+        // Update reviews
+        reviewsContainer.innerHTML = "";
+        variant.reviews.forEach(review => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
+          reviewsContainer.appendChild(article);
+        });
+      }
+
+      // Initialize with default
+      updateContent(variantSelect.value);
+
+      variantSelect.addEventListener("change", function () {
+        updateContent(variantSelect.value);
+      });
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Foldable Shoe Pouch Organizer</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="product-image" src="" alt="Foldable Shoe Pouch Organizer" />
+    </div>
+
+    <div class="product-info">
+      <label for="variant"><strong>Select Color:</strong></label>
+      <select id="variant">
+        <option value="grey">Grey</option>
+        <option value="red">Red</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>Durable, water-resistant nylon material</li>
+        <li>Holds sneakers, sandals, or heels (up to 3 pairs)</li>
+        <li>Top handle for easy carrying</li>
+        <li>Mesh window for breathability</li>
+        <li>Available in multiple colors</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('shoepouch')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

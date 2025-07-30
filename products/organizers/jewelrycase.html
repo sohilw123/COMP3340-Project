@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jewelry Case with Anti-Tangle Compartments | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+      const variantSelect = document.getElementById("variant");
+      const productImage = document.getElementById("product-image");
+      const price = document.getElementById("price");
+      const description = document.getElementById("description");
+      const reviewsContainer = document.getElementById("reviews");
+
+      const variants = {
+        small: {
+          img: "../../images/organizers/Jewelry Case/travel-jewelry-case-small.jpg",
+          price: "$19.99",
+          desc: "Perfect for weekend getaways, this compact jewelry case keeps your essentials organized and tangle-free.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "I used to dread untangling my necklaces—this case is a game changer!", author: "Lila N." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Perfect size and keeps all my jewelry organized. Great for weekend trips.", author: "Bree S." }
+          ]
+        },
+        large: {
+          img: "../../images/organizers/Jewelry Case/travel-jewelry-case-large.jpg",
+          price: "$29.99",
+          desc: "Ideal for extended trips, the large jewelry case offers more compartments to keep all your accessories in order.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Held all my earrings, bracelets, and even a watch. No tangles!", author: "Serena K." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Lots of compartments. Took it on a 2-week trip—no complaints!", author: "Dana P." }
+          ]
+        }
+      };
+
+      function updateContent(selected) {
+        const variant = variants[selected];
+        productImage.src = variant.img;
+        price.textContent = variant.price;
+        description.textContent = variant.desc;
+
+        // Update reviews
+        reviewsContainer.innerHTML = "";
+        variant.reviews.forEach(review => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
+          reviewsContainer.appendChild(article);
+        });
+      }
+
+      // Initialize with default selection
+      updateContent(variantSelect.value);
+
+      variantSelect.addEventListener("change", function () {
+        updateContent(variantSelect.value);
+      });
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jewelry Case with Anti-Tangle Compartments</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="product-image" src="" alt="Jewelry Case" />
+    </div>
+
+    <div class="product-info">
+      <label for="variant"><strong>Select Version:</strong></label>
+      <select id="variant">
+        <option value="small">Small (Compact)</option>
+        <option value="large">Large (Spacious)</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>Multiple compartments for rings, earrings, necklaces, and more</li>
+        <li>Anti-tangle hooks and elastic straps</li>
+        <li>Soft velvet interior with protective padding</li>
+        <li>Compact and lightweight, perfect for carry-on</li>
+        <li>Zipper closure with travel-friendly design</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('jewelrycase')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

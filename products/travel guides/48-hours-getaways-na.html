@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>48-Hour Getaways | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const editionSelect = document.getElementById("edition");
+      const img = document.getElementById("guide-image");
+      const price = document.getElementById("price");
+      const desc = document.getElementById("description");
+      const reviews = document.getElementById("reviews");
+
+      const editions = {
+        na: {
+          img: "../../images/travel guides/48 Hour Getaways/48hour-NA.png",
+          price: "$17.95",
+          description:
+            "<em>48-Hour Getaways: North America</em> is your go-to travel guide for unforgettable weekend escapes across the United States and Canada. Maximize your time without compromising adventure.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "Took a quick trip to Montreal using this guide—excellent suggestions and timing tips!",
+              author: "Chris M."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Helped me plan a last-minute adventure to Napa Valley. Very easy to follow.",
+              author: "Danielle T."
+            }
+          ]
+        },
+        eu: {
+          img: "../../images/travel guides/48 Hour Getaways/48hour-EU.png",
+          price: "$19.95",
+          description:
+            "<em>48-Hour Getaways: Europe</em> offers carefully crafted weekend itineraries across iconic European cities. Ideal for spontaneous travelers, couples, or weekend warriors exploring the continent.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "Paris in 48 hours? This book nailed it. Loved the dining and museum recs!",
+              author: "Leo P."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Used it for a weekend in Prague—super smooth planning and suggestions.",
+              author: "Fatima N."
+            }
+          ]
+        }
+      };
+
+      function updateContent(key) {
+        const data = editions[key];
+        img.src = data.img;
+        price.textContent = data.price;
+        desc.innerHTML = data.description;
+
+        // Clear and render reviews
+        reviews.innerHTML = "";
+        data.reviews.forEach((r) => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
+          reviews.appendChild(article);
+        });
+      }
+
+      updateContent(editionSelect.value);
+      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>48-Hour Getaways</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="guide-image" src="" alt="48-Hour Getaway Guide" />
+    </div>
+
+    <div class="product-info">
+      <label for="edition"><strong>Select Region:</strong></label>
+      <select id="edition">
+        <option value="na">North America</option>
+        <option value="eu">Europe</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>30 curated weekend itineraries</li>
+        <li>Includes hidden gems, city highlights, and outdoor retreats</li>
+        <li>Transportation and lodging recommendations for 2-night stays</li>
+        <li>Perfect for couples, families, or solo travelers</li>
+        <li>QR codes for maps, local apps, and booking sites</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('48hourgetaways')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>City Explorer Travel Guide | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const editionSelect = document.getElementById("edition");
+      const img = document.getElementById("guide-image");
+      const price = document.getElementById("price");
+      const desc = document.getElementById("description");
+      const reviews = document.getElementById("reviews");
+
+      const editions = {
+        city: {
+          img: "../../images/travel guides/City Explorer/nyt-explorer-city.jpg",
+          price: "$13.50",
+          description:
+            "<em>City Explorer: NYC Edition</em> takes you through Manhattan, Brooklyn, and Queens with curated walking tours, food markets, historic landmarks, and subway tips to navigate the city like a pro.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "Loved the hidden rooftop cafes! Perfect for first-time NYC visitors.",
+              author: "Julia S."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Very walkable guides and great food suggestions. Battery Park walk was awesome.",
+              author: "Marco V."
+            }
+          ]
+        },
+        beaches: {
+          img: "../../images/travel guides/City Explorer/nyt-explorer-beaches.jpg",
+          price: "$14.25",
+          description:
+            "<em>City Explorer: NYC Beaches</em> is your insider guide to sun-soaked escapes in and around New York. Explore Rockaway, Coney Island, and beyond—complete with surf spots, beach eats, and ferry routes.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "Took this to Rockaway and loved the taco shack recommendation!",
+              author: "Leah T."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Great balance of maps, tips, and local eats. Lifesaver for weekend escapes.",
+              author: "Nathan P."
+            }
+          ]
+        }
+      };
+
+      function updateContent(edition) {
+        const data = editions[edition];
+        img.src = data.img;
+        price.textContent = data.price;
+        desc.innerHTML = data.description;
+
+        reviews.innerHTML = "";
+        data.reviews.forEach((r) => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
+          reviews.appendChild(article);
+        });
+      }
+
+      updateContent(editionSelect.value);
+      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>City Explorer Travel Guide</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="guide-image" src="" alt="City Explorer Guide Image" />
+    </div>
+
+    <div class="product-info">
+      <label for="edition"><strong>Select Edition:</strong></label>
+      <select id="edition">
+        <option value="city" selected>City Edition</option>
+        <option value="beaches">Beaches Edition</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>Smart weekend itineraries</li>
+        <li>Local favorites & food spots</li>
+        <li>Transit tips and QR-coded maps</li>
+        <li>Pocket-size and waterproof cover</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('cityexplorer')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

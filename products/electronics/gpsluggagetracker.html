@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Luggage Tracker (GPS Enabled) | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Luggage Tracker (GPS Enabled)</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-android.jpg" alt="GPS Tracker Android">
+    </div>
+
+    <div class="product-info">
+      <h2>$49.99</h2>
+
+      <label for="variant">Choose Platform:</label>
+      <select id="variant" onchange="updateTrackerVariant()">
+        <option value="android">Android</option>
+        <option value="apple">Apple</option>
+      </select>
+
+      <p id="description">Never lose track of your belongings again with the Smart Luggage Tracker. Featuring real-time GPS location and app connectivity for Android, this compact device ensures you know where your luggage is—anywhere in the world.</p>
+
+      <ul>
+        <li>Real-time GPS tracking via smartphone app</li>
+        <li>Works globally with built-in SIM (first year included)</li>
+        <li>Rechargeable battery lasts up to 15 days</li>
+        <li>Compact and TSA-approved for air travel</li>
+        <li>Set custom alerts and geofencing zones</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('gpsluggagetracker')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Used this on 3 flights—worked perfectly and gave peace of mind.” — Lila K.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Accurate tracking and battery lasted my whole 10-day trip.” — Roman J.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const trackerVariants = {
+      android: {
+        img: "../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-android.jpg",
+        alt: "GPS Tracker Android",
+        description: "Never lose track of your belongings again with the Smart Luggage Tracker. Featuring real-time GPS location and app connectivity for Android, this compact device ensures you know where your luggage is—anywhere in the world.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Used this on 3 flights—worked perfectly and gave peace of mind.” — Lila K.",
+          "⭐️⭐️⭐️⭐️ “Accurate tracking and battery lasted my whole 10-day trip.” — Roman J."
+        ]
+      },
+      apple: {
+        img: "../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-apple.jpg",
+        alt: "GPS Tracker Apple",
+        description: "Optimized for Apple devices, this Smart Luggage Tracker connects easily via Find My app and Bluetooth, offering seamless GPS location tracking for every trip.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Perfect for my iPhone—connected instantly and tracked flawlessly.” — Andrea P.",
+          "⭐️⭐️⭐️⭐️ “Easy setup and reliable tracking. Battery held up for a full trip to Europe.” — Devon S."
+        ]
+      }
+    };
+
+    function updateTrackerVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = trackerVariants[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsContainer = document.getElementById("reviews");
+      reviewsContainer.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsContainer.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

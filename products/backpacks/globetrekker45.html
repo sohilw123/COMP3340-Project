@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlobeTrekker 45L Adventure Backpack | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 8px;
+    }
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GlobeTrekker 45L Adventure Backpack</h1>
+    <nav>
+      <ul>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="orders.html">My Orders</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/backpacks/GlobeTrekker45/globetrekker45_black.jpg" alt="GlobeTrekker 45L Black">
+    </div>
+
+    <div class="product-info">
+      <h2 id="productPrice">$89.99</h2>
+
+      <label for="variant">Select Color:</label>
+      <select id="variant" onchange="updateVariant()">
+        <option value="black">Black</option>
+        <option value="green">Green</option>
+        <option value="teal">Teal</option>
+      </select>
+
+      <p id="description">The ultimate travel companion for adventurers. Designed with durability, comfort, and versatility in mind, the GlobeTrekker 45L Adventure Backpack is ideal for long journeys, weekend hikes, and urban exploration.</p>
+
+      <ul>
+        <li>Capacity: 45 liters</li>
+        <li>Water-resistant, tear-proof fabric</li>
+        <li>Padded back and ergonomic shoulder straps</li>
+        <li>Expandable compartments and laptop sleeve</li>
+        <li>Multiple exterior pockets with zippers</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('globetrekker45')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “This backpack survived my 3-month trip through South America. Great comfort and storage space!” — Ana R.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Good size for weekend trips. Only wish the laptop compartment was a bit more padded.” — Liam T.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const productData = {
+      black: {
+        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_black.jpg",
+        alt: "GlobeTrekker 45L Black",
+        description: "Classic rugged black finish—perfect for serious treks and stealthy style.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “This backpack survived my 3-month trip through South America. Great comfort and storage space!” — Ana R.",
+          "⭐️⭐️⭐️⭐️ “Good size for weekend trips. Only wish the laptop compartment was a bit more padded.” — Liam T."
+        ]
+      },
+      green: {
+        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_green.jpg",
+        alt: "GlobeTrekker 45L Green",
+        description: "A fresh earthy green perfect for nature lovers and outdoor photographers.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Blends in well with the forest—ideal for nature trails. Plenty of space too!” — Zoe M.",
+          "⭐️⭐️⭐️⭐️ “Durable, comfy, and stylish. Would recommend to any traveler.” — Jason H."
+        ]
+      },
+      teal: {
+        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_teal.jpg",
+        alt: "GlobeTrekker 45L Teal",
+        description: "Bold teal edition for adventurers who want to stand out while staying practical.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Love the teal color! Sturdy, stylish, and holds everything I need.” — Nina P.",
+          "⭐️⭐️⭐️⭐️ “Definitely eye-catching. Great for both city and hiking use.” — Omar F."
+        ]
+      }
+    };
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = productData[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(r => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${r.split(" “")[0]}</strong> “${r.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

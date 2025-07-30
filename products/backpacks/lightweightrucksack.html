@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lightweight Mesh Hiking Rucksack | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lightweight Mesh Hiking Rucksack</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/backpacks/Lightweight Trucksack/lightweighttrucksack_black.jpg" alt="Black Rucksack">
+    </div>
+
+    <div class="product-info">
+      <h2>$59.99</h2>
+
+      <label for="variant">Choose Color:</label>
+      <select id="variant" onchange="updateVariant()">
+        <option value="black">Black</option>
+        <option value="camo">Camo</option>
+        <option value="khaki">Khaki</option>
+      </select>
+
+      <p id="description">Perfect for minimalist hikers and summer adventures, the Lightweight Mesh Hiking Rucksack is breathable, collapsible, and surprisingly durable. Say goodbye to bulky packs and hello to freedom on the trail.</p>
+
+      <ul>
+        <li>25L capacity with ultralight mesh construction</li>
+        <li>Weighs under 500g</li>
+        <li>Compact, foldable design for easy packing</li>
+        <li>Quick-dry mesh exterior with durable nylon base</li>
+        <li>Adjustable, padded shoulder straps</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('lightweightrucksack')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “So light I forgot I was wearing it. Perfect for day hikes in hot weather.” — Nina P.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Good size and folds up nicely. Wish it had more pockets, but great for the price.” — Jeremy H.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const productData = {
+      black: {
+        img: "../../images/backpacks/Lightweight Trucksack/lightweighttrucksack_black.jpg",
+        alt: "Black Rucksack",
+        description: "Sleek and stealthy, the black version is perfect for urban hiking and blending in during city escapes.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Lightweight and durable—my go-to for bike commuting too!” — Travis D.",
+          "⭐️⭐️⭐️⭐️ “Looks clean and fits more than expected. Great airflow on the back.” — Priya G."
+        ]
+      },
+      camo: {
+        img: "../../images/backpacks/Lightweight Trucksack/lightweighttrucksack_camo.jpg",
+        alt: "Camo Rucksack",
+        description: "Built for the trail, the camo edition blends into the wild and stands up to rugged use.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Great pack for hunting and hiking. Super breathable.” — Alex M.",
+          "⭐️⭐️⭐️⭐️ “Nice camo print. Would be even better with more storage loops.” — Jen R."
+        ]
+      },
+      khaki: {
+        img: "../../images/backpacks/Lightweight Trucksack/lightweighttrucksack_khaki.jpg",
+        alt: "Khaki Rucksack",
+        description: "Stylish yet functional, the khaki rucksack is great for warm-weather treks and beachside exploring.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Perfect for hiking in the desert—breathes well and looks good.” — Omar S.",
+          "⭐️⭐️⭐️⭐️ “Love the neutral color. Lightweight and compact.” — Riley F."
+        ]
+      }
+    };
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = productData[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

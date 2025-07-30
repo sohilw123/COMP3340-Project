@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compression Packing Cubes (5-pack) | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script src="../../script.js" defer></script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Compression Packing Cubes (5-pack)</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/organizers/Packing Cubes/packing-cubes-small.jpg" alt="Small Compression Packing Cubes" />
+    </div>
+
+    <div class="product-info">
+      <h2 id="price">$29.99</h2>
+
+      <label for="variant">Choose Size:</label>
+      <select id="variant" onchange="updateCubes()">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+
+      <p id="description">Perfect for organizing undergarments, socks, and accessories in your luggage.</p>
+
+      <ul>
+        <li>Set includes 5 cubes in selected size</li>
+        <li>Double zipper compression system saves space</li>
+        <li>Durable, lightweight nylon</li>
+        <li>Mesh tops for breathability and visibility</li>
+        <li>Available in multiple colors</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('compressioncubes')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “These cubes helped me pack for a two-week trip in one carry-on. Life saver!” — Riley F.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Love how easy it is to keep things organized. The compression works better than I expected.” — Denise H.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const cubeVariants = {
+      small: {
+        img: "../../images/organizers/Packing Cubes/packing-cubes-small.jpg",
+        price: "$29.99",
+        desc: "Perfect for organizing undergarments, socks, and accessories in your luggage.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Compact and fits easily in my backpack!” — Jenna W.",
+          "⭐️⭐️⭐️⭐️ “Great for separating small items on the go.” — Arman L."
+        ]
+      },
+      medium: {
+        img: "../../images/organizers/Packing Cubes/packing-cubes-medium.jpg",
+        price: "$32.99",
+        desc: "Great all-purpose cube size for shirts, tops, and casual wear.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Perfect mid-size cube. Fits my shirts neatly.” — Paolo R.",
+          "⭐️⭐️⭐️⭐️ “Solid zippers and good compression!” — Mira S."
+        ]
+      },
+      large: {
+        img: "../../images/organizers/Packing Cubes/packing-cubes-large.jpg",
+        price: "$36.99",
+        desc: "Best for bulkier items like sweaters, pants, or jackets.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Packed all my jeans and still saved space!” — Troy M.",
+          "⭐️⭐️⭐️⭐️ “Very roomy and holds shape well.” — Grace N."
+        ]
+      }
+    };
+
+    function updateCubes() {
+      const selected = document.getElementById("variant").value;
+      const variant = cubeVariants[selected];
+
+      document.getElementById("productImage").src = variant.img;
+      document.getElementById("productImage").alt = `${selected} Compression Packing Cubes`;
+      document.getElementById("price").textContent = variant.price;
+      document.getElementById("description").textContent = variant.desc;
+
+      const reviewSection = document.getElementById("reviews");
+      reviewSection.innerHTML = "";
+      variant.reviews.forEach(r => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${r.split(" “")[0]}</strong> “${r.split(" “")[1]}`;
+        reviewSection.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const qty = parseInt(document.getElementById("quantity").value);
+      alert(`${qty} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

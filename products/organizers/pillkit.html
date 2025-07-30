@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pill Organizer + Emergency Kit Pouch | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+      const variantSelect = document.getElementById("variant");
+      const productImage = document.getElementById("product-image");
+      const price = document.getElementById("price");
+      const description = document.getElementById("description");
+      const reviewsContainer = document.getElementById("reviews");
+
+      const variants = {
+        black: {
+          img: "../../images/organizers/Pill Organizer/pill-organizer-black.jpg",
+          price: "$16.99",
+          desc: "A sleek black pill organizer pouch with a first-aid section, perfect for everyday carry and travel.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Everything in one place—pills, first aid, and peace of mind. Love it!", author: "Sean R." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Perfect for flights and road trips. Fits in any backpack pocket.", author: "Ana K." }
+          ]
+        },
+        pink: {
+          img: "../../images/organizers/Pill Organizer/pill-organizer-pink.jpg",
+          price: "$16.99",
+          desc: "A bright and cheerful pink case that adds style to your travel essentials without sacrificing function.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Super cute and super functional. Everything I need fits perfectly.", author: "Jenny M." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Love the color and layout. Makes organizing meds a breeze!", author: "Claire S." }
+          ]
+        },
+        teal: {
+          img: "../../images/organizers/Pill Organizer/pill-organizer-teal.jpg",
+          price: "$16.99",
+          desc: "A modern teal design with waterproof lining, ideal for outdoor trips or longer vacations.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Teal is my favorite and this bag does it all. Highly recommend!", author: "Raymond G." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Great layout, great color, and keeps things tidy.", author: "Fiona L." }
+          ]
+        }
+      };
+
+      function updateContent(selected) {
+        const variant = variants[selected];
+        productImage.src = variant.img;
+        price.textContent = variant.price;
+        description.textContent = variant.desc;
+
+        // Update reviews
+        reviewsContainer.innerHTML = "";
+        variant.reviews.forEach(review => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
+          reviewsContainer.appendChild(article);
+        });
+      }
+
+      // Initialize with default selection
+      updateContent(variantSelect.value);
+
+      variantSelect.addEventListener("change", function () {
+        updateContent(variantSelect.value);
+      });
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pill Organizer + Emergency Kit Pouch</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="product-image" src="" alt="Pill Organizer + Emergency Kit Pouch" />
+    </div>
+
+    <div class="product-info">
+      <label for="variant"><strong>Select Color:</strong></label>
+      <select id="variant">
+        <option value="black">Black</option>
+        <option value="pink">Pink</option>
+        <option value="teal">Teal</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>7-day pill organizer with labeled compartments</li>
+        <li>Separate pocket for emergency supplies like bandages, ointments, tweezers</li>
+        <li>Durable zippered pouch with internal mesh dividers</li>
+        <li>Lightweight, portable, and TSA-compliant</li>
+        <li>Water-resistant outer shell</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('pillkit')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

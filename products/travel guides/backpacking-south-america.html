@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backpacking South America Handbook | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const editionSelect = document.getElementById("edition");
+      const img = document.getElementById("handbook-image");
+      const price = document.getElementById("price");
+      const desc = document.getElementById("description");
+      const reviews = document.getElementById("reviews");
+
+      const editions = {
+        third: {
+          img: "../../images/travel guides/Backpacking Handbook/backpacking-handbook-3rdedition.jpg",
+          price: "$22.75",
+          description:
+            "<em>Backpacking South America Handbook — 3rd Edition</em> is your essential guide to exploring the continent. From Andes hikes to Amazon river tours, get real-world advice, budget tips, and cultural insights.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "An essential guide for backpackers! Helped me get around Peru and Bolivia safely.",
+              author: "Luis V."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Loved the hostel recs and offbeat trail suggestions. Great for solo travelers.",
+              author: "Emma R."
+            }
+          ]
+        },
+        fourth: {
+          img: "../../images/travel guides/Backpacking Handbook/backpacking-handbook-4thedition.jpg",
+          price: "$24.50",
+          description:
+            "<em>Backpacking South America Handbook — 4th Edition</em> is fully updated for 2025 with new destinations, revised visa info, and eco-conscious travel tips. Your ultimate companion for exploring South America.",
+          reviews: [
+            {
+              rating: "⭐️⭐️⭐️⭐️⭐️",
+              text: "The 4th edition is even better — updated border rules and amazing off-grid adventures!",
+              author: "Carlos J."
+            },
+            {
+              rating: "⭐️⭐️⭐️⭐️",
+              text: "Super detailed, helped me plan my Colombia and Chile itinerary perfectly.",
+              author: "Sofia L."
+            }
+          ]
+        }
+      };
+
+      function updateContent(key) {
+        const data = editions[key];
+        img.src = data.img;
+        price.textContent = data.price;
+        desc.innerHTML = data.description;
+
+        reviews.innerHTML = "";
+        data.reviews.forEach((r) => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
+          reviews.appendChild(article);
+        });
+      }
+
+      updateContent(editionSelect.value);
+      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Backpacking South America Handbook</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="handbook-image" src="" alt="Backpacking South America Handbook" />
+    </div>
+
+    <div class="product-info">
+      <label for="edition"><strong>Select Edition:</strong></label>
+      <select id="edition">
+        <option value="third">3rd Edition</option>
+        <option value="fourth">4th Edition</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>Covers 9 South American countries</li>
+        <li>Budget travel advice and hostel recommendations</li>
+        <li>Includes safety tips and visa information</li>
+        <li>City guides, language basics, and regional food highlights</li>
+        <li>Eco-tourism options and responsible travel guidance</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('southamericahandbook')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

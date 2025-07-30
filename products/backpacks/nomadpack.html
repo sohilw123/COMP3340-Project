@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nomad Waterproof Hiking Pack | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nomad Waterproof Hiking Pack</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/backpacks/NomadPack/nomadpack_backpack.jpg" alt="Nomad Pack - Backpack">
+    </div>
+
+    <div class="product-info">
+      <h2>$99.99</h2>
+
+      <label for="variant">Choose Style:</label>
+      <select id="variant" onchange="updateVariant()">
+        <option value="backpack">Backpack</option>
+        <option value="wheels">Wheeled</option>
+      </select>
+
+      <p id="description">Built for serious adventurers, the Nomad Waterproof Hiking Pack is engineered to withstand the harshest conditions while keeping your gear safe and dry. Perfect for backcountry expeditions, rainy treks, and mountain climbs.</p>
+
+      <ul>
+        <li>Fully waterproof and mud-resistant shell</li>
+        <li>50L capacity with expandable side compartments</li>
+        <li>Built-in hydration bladder pouch</li>
+        <li>Chest and waist straps for extra support</li>
+        <li>Reflective striping for low-light visibility</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('nomadpack')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Hiked through three rainstorms—gear stayed completely dry. This pack is a beast.” — Alex D.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Incredible durability, though a bit bulky for day hikes. Great for multi-day trips.” — Leah M.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const productData = {
+      backpack: {
+        img: "../../images/backpacks/NomadPack/nomadpack_backpack.jpg",
+        alt: "Nomad Pack - Backpack",
+        description: "Built for serious adventurers, the Nomad Backpack is engineered to withstand harsh conditions while keeping your gear safe and dry. Ideal for long treks and wilderness expeditions.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Hiked through three rainstorms—gear stayed completely dry. This pack is a beast.” — Alex D.",
+          "⭐️⭐️⭐️⭐️ “Incredible durability, though a bit bulky for day hikes. Great for multi-day trips.” — Leah M."
+        ]
+      },
+      wheels: {
+        img: "../../images/backpacks/NomadPack/nomadpack_wheels.jpg",
+        alt: "Nomad Pack - Wheeled",
+        description: "Roll with ease through airports and rough trails alike. The wheeled Nomad Pack keeps your essentials dry and mobile, making it perfect for hybrid travel.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Used it for a hiking trip to Costa Rica and wheeled it through town. Super versatile.” — Miguel F.",
+          "⭐️⭐️⭐️⭐️ “Convenient for both urban and rugged use. Love the waterproof feature.” — Kira B."
+        ]
+      }
+    };
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = productData[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Worldwide SIM Card & WiFi Hotspot | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Worldwide SIM Card & WiFi Hotspot</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi6.jpg" alt="WiFi 6 Hotspot">
+    </div>
+
+    <div class="product-info">
+      <h2>$89.99</h2>
+
+      <label for="variant">Choose Model:</label>
+      <select id="variant" onchange="updateHotspotVariant()">
+        <option value="wifi6">WiFi 6</option>
+        <option value="wifi7">WiFi 7</option>
+      </select>
+
+      <p id="description">
+        Stay connected across the globe with the WiFi 6-enabled Worldwide SIM Card & Hotspot. Perfect for business travelers and adventurers alike, this device supports fast international connectivity.
+      </p>
+
+      <ul>
+        <li>Supports 4G LTE in 130+ countries</li>
+        <li>Connect up to 10 devices simultaneously</li>
+        <li>Includes a preloaded international SIM card</li>
+        <li>Rechargeable battery with 12-hour usage</li>
+        <li>Mobile app for data tracking and recharges</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('simhotspot')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Lifesaver on my Europe trip. Shared WiFi with 3 devices and stayed connected everywhere!” — Tania M.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Very easy setup, and the SIM worked in all the countries I visited. Just wish it had USB-C.” — Eric Z.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const hotspotVariants = {
+      wifi6: {
+        img: "../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi6.jpg",
+        alt: "WiFi 6 Hotspot",
+        description: "Stay connected across the globe with the WiFi 6-enabled Worldwide SIM Card & Hotspot. Perfect for business travelers and adventurers alike, this device supports fast international connectivity.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Lifesaver on my Europe trip. Shared WiFi with 3 devices and stayed connected everywhere!” — Tania M.",
+          "⭐️⭐️⭐️⭐️ “Very easy setup, and the SIM worked in all the countries I visited. Just wish it had USB-C.” — Eric Z."
+        ]
+      },
+      wifi7: {
+        img: "../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi7.jpg",
+        alt: "WiFi 7 Hotspot",
+        description: "Experience the fastest speeds yet with our latest WiFi 7 Hotspot & SIM device. Ideal for 4K streaming, remote work, and high-bandwidth needs while traveling.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Streaming Netflix in HD from a train in Germany—WiFi 7 is wild.” — Ravi N.",
+          "⭐️⭐️⭐️⭐️ “Next-gen speeds and surprisingly long battery life. Worth the upgrade!” — Cynthia L."
+        ]
+      }
+    };
+
+    function updateHotspotVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = hotspotVariants[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsContainer = document.getElementById("reviews");
+      reviewsContainer.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsContainer.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noise-Canceling Bluetooth Earbuds | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Noise-Canceling Bluetooth Earbuds</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-black.jpg" alt="Bluetooth Earbuds Black">
+    </div>
+
+    <div class="product-info">
+      <h2>$59.99</h2>
+
+      <label for="variant">Choose Color:</label>
+      <select id="variant" onchange="updateVariant()">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+      </select>
+
+      <p id="description">Experience immersive sound and total peace on your travels with these Noise-Canceling Bluetooth Earbuds. Designed for long flights and busy terminals, these compact earbuds block out noise while delivering premium audio clarity.</p>
+
+      <ul>
+        <li>Active noise cancellation (ANC) technology</li>
+        <li>Bluetooth 5.2 for stable, high-quality connection</li>
+        <li>Up to 30 hours playtime with charging case</li>
+        <li>Water-resistant design (IPX5)</li>
+        <li>Touch controls and built-in mic for calls</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('bluetoothearbuds')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Silenced airplane noise and gave amazing bass. Incredible battery life too!” — Jamie T.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “They fit great and didn’t fall out while walking around Tokyo. Sound quality is excellent.” — Marcus W.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const productData = {
+      black: {
+        img: "../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-black.jpg",
+        alt: "Bluetooth Earbuds Black",
+        description: "Experience immersive sound and total peace on your travels with these Noise-Canceling Bluetooth Earbuds. Designed for long flights and busy terminals, these compact earbuds block out noise while delivering premium audio clarity.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Silenced airplane noise and gave amazing bass. Incredible battery life too!” — Jamie T.",
+          "⭐️⭐️⭐️⭐️ “They fit great and didn’t fall out while walking around Tokyo. Sound quality is excellent.” — Marcus W."
+        ]
+      },
+      white: {
+        img: "../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-white.jpg",
+        alt: "Bluetooth Earbuds White",
+        description: "Enjoy your audio in style with the white edition. Same advanced ANC performance with a sleek, minimalist design that pairs perfectly with all outfits.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “So clean-looking and they sound amazing. Love the case too.” — Brianna H.",
+          "⭐️⭐️⭐️⭐️ “Used them daily in Rome. The noise cancellation is awesome for street traffic.” — Dario M."
+        ]
+      }
+    };
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = productData[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>

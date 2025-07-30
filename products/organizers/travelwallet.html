@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RFID-Blocking Travel Wallet | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const variantSelect = document.getElementById("variant");
+      const productImage = document.getElementById("product-image");
+      const price = document.getElementById("price");
+      const description = document.getElementById("description");
+      const reviewsContainer = document.getElementById("reviews");
+
+      const variants = {
+        leather: {
+          img: "../../images/organizers/RFID-Blocking Travel Wallet/travel-wallet-leather.jpg",
+          price: "$24.99",
+          desc: "A stylish RFID-blocking wallet wrapped in genuine leather. Ideal for travelers who value both security and sophistication.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Super sleek and reliable. The leather feels premium and it fits all my travel docs perfectly.", author: "Noah D." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Elegant and secure — finally found something travel-friendly that doesn't look cheap.", author: "Emily F." }
+          ]
+        },
+        metal: {
+          img: "../../images/organizers/RFID-Blocking Travel Wallet/travel-wallet-metal.jpg",
+          price: "$26.99",
+          desc: "A high-tech RFID-blocking wallet with a durable metal core for maximum protection and a futuristic look.",
+          reviews: [
+            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Absolutely love the metal finish — feels secure and indestructible.", author: "Jordan S." },
+            { rating: "⭐️⭐️⭐️⭐️", text: "Takes a beating and keeps my cards safe. A great choice for frequent flyers.", author: "Maya Z." }
+          ]
+        }
+      };
+
+      function updateContent(selected) {
+        const variant = variants[selected];
+        productImage.src = variant.img;
+        price.textContent = variant.price;
+        description.textContent = variant.desc;
+
+        // Refresh reviews
+        reviewsContainer.innerHTML = "";
+        variant.reviews.forEach(review => {
+          const article = document.createElement("article");
+          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
+          reviewsContainer.appendChild(article);
+        });
+      }
+
+      // Default selection
+      updateContent(variantSelect.value);
+
+      variantSelect.addEventListener("change", () => {
+        updateContent(variantSelect.value);
+      });
+    });
+  </script>
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RFID-Blocking Travel Wallet</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="product-image" src="" alt="RFID-Blocking Travel Wallet" />
+    </div>
+
+    <div class="product-info">
+      <label for="variant"><strong>Select Style:</strong></label>
+      <select id="variant">
+        <option value="leather">Leather</option>
+        <option value="metal">Metal</option>
+      </select>
+
+      <h2 id="price"></h2>
+      <p id="description"></p>
+
+      <ul>
+        <li>RFID-blocking technology for identity protection</li>
+        <li>Holds passport, boarding pass, credit cards, and cash</li>
+        <li>Water-resistant nylon or metallic finish options</li>
+        <li>Zippered closure with interior mesh compartments</li>
+        <li>Available in multiple materials</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1" />
+      <button class="btn" onclick="addToCart('travelwallet')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+</body>
+</html>

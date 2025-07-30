@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portable Solar Power Bank | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Portable Solar Power Bank</h1>
+    <nav>
+      <ul>
+        <li><a href="../../homepage.html">Home</a></li>
+        <li><a href="../../products.html">Products</a></li>
+        <li><a href="../../cart.html">Cart</a></li>
+        <li><a href="../../orders.html">My Orders</a></li>
+        <li><a href="../../login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="product-detail">
+    <div class="product-display">
+      <img id="productImage" src="../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-15W.jpg" alt="15W Solar Power Bank">
+    </div>
+
+    <div class="product-info">
+      <h2>$39.99</h2>
+
+      <label for="variant">Choose Model:</label>
+      <select id="variant" onchange="updatePowerBank()">
+        <option value="15w">15W</option>
+        <option value="28w">28W</option>
+      </select>
+
+      <p id="description">
+        Charge on the go with the 15W Solar Power Bank. Ideal for day hikes or weekend camping, this compact charger gives you reliable backup using solar energy or USB.
+      </p>
+
+      <ul>
+        <li>High-capacity 20,000mAh battery</li>
+        <li>Dual USB output + micro-USB input</li>
+        <li>Solar panel charging capability</li>
+        <li>Built-in LED flashlight and compass</li>
+        <li>Shockproof, dustproof, and splash resistant</li>
+      </ul>
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" value="1" min="1">
+      <button class="btn" onclick="addToCart('solarpowerbank')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="product-reviews">
+    <h3>Customer Reviews</h3>
+    <div id="reviews">
+      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Took this hiking in the Rockies—kept both my phone and GPS charged the entire weekend!” — Carlos D.</p></article>
+      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Reliable backup power. Solar charging is slow but handy in emergencies.” — Alina F.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store</p>
+  </footer>
+
+  <script>
+    const powerBankVariants = {
+      "15w": {
+        img: "../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-15W.jpg",
+        alt: "15W Solar Power Bank",
+        description: "Charge on the go with the 15W Solar Power Bank. Ideal for day hikes or weekend camping, this compact charger gives you reliable backup using solar energy or USB.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Took this hiking in the Rockies—kept both my phone and GPS charged the entire weekend!” — Carlos D.",
+          "⭐️⭐️⭐️⭐️ “Reliable backup power. Solar charging is slow but handy in emergencies.” — Alina F."
+        ]
+      },
+      "28w": {
+        img: "../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-28W.jpg",
+        alt: "28W Solar Power Bank",
+        description: "Power up faster with the 28W Solar Power Bank. Great for long treks or group travel, this robust charger features high-efficiency solar cells and rapid charging output.",
+        reviews: [
+          "⭐️⭐️⭐️⭐️⭐️ “Used this on a 5-day expedition—charged our drone and two phones!” — Chris Y.",
+          "⭐️⭐️⭐️⭐️ “Charges noticeably faster than the old one. It’s rugged and dependable.” — Naomi T."
+        ]
+      }
+    };
+
+    function updatePowerBank() {
+      const selected = document.getElementById("variant").value;
+      const data = powerBankVariants[selected];
+
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsContainer = document.getElementById("reviews");
+      reviewsContainer.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        reviewsContainer.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+  </script>
+</body>
+</html>
