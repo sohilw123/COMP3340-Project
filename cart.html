@@ -1,0 +1,52 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Shopping Cart | GlobeTrotter Store</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Your Shopping Cart</h1>
+    <nav>
+      <ul>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="newsletter.html">Newsletter</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="orders.html">My Orders</a></li>
+        <li><a href="help.html">Help</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro-text">
+      <h2>Review Your Items</h2>
+      <p>Double-check the items in your cart before heading to checkout. You can update quantities or remove products below.</p>
+    </section>
+
+    <div id="cart-container" class="product-grid">
+      <!-- Cart items will be populated by JavaScript -->
+    </div>
+
+    <div class="checkout">
+      <p><strong>Total:</strong> <span id="cart-total">$0.00</span></p>
+      <button class="btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+
+    <section class="info-block">
+      <h3>Need to Add More?</h3>
+      <p><a href="products.html">Continue Shopping</a> to browse more travel gear and accessories.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store. Safe travels start here.</p>
+  </footer>
+</body>
+</html>

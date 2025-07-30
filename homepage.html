@@ -1,0 +1,207 @@
+<!-- homepage.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop travel gear, gadgets, and guides with GlobeTrotter">
+  <meta name="keywords" content="travel, shop, luggage, gear, ecommerce">
+  <title>GlobeTrotter | Travel Essentials Store</title>
+  <link rel="icon" href="images/favicon.ico">
+  <link rel="stylesheet" href="styles.css">
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
+
+<select id="themeSelect">
+  <option value="theme-light.css">Light</option>
+  <option value="theme-dark.css">Dark</option>
+  <option value="theme-blue.css">Blue</option>
+</select>
+
+  <style>
+    .slideshow-container {
+      position: relative;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .slideshow-container img {
+      width: 100%;
+      display: none;
+    }
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  </style>
+  <script>
+    let slideIndex = 0;
+    let slides;
+
+    function showSlide(n) {
+      slides.forEach((slide, index) => {
+        slide.style.display = index === n ? "block" : "none";
+      });
+    }
+
+    function plusSlides(n) {
+      slideIndex += n;
+      if (slideIndex >= slides.length) slideIndex = 0;
+      if (slideIndex < 0) slideIndex = slides.length - 1;
+      showSlide(slideIndex);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      slides = document.querySelectorAll(".slideshow-container img");
+      showSlide(slideIndex);
+    });
+  </script>
+
+</head>
+<body>
+  <header>
+    <h1>GlobeTrotter Store</h1>
+    <nav>
+      <ul>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="newsletter.html">Newsletter</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="orders.html">My Orders</a></li>
+        <li><a href="help.html">Help</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  
+
+
+  <section class="hero">
+    <img src="images/delivery.png" alt="Free Shipping Icon" class="feature-icon">
+    <h2>Adventure Starts With the Right Gear</h2>
+    <p>Explore premium backpacks, travel adapters, packing organizers, and exclusive destination guides.</p>
+    <a href="products.html" class="btn">Browse Products</a>
+    <br/>
+    <br/>
+    <br/>
+    <img src="images/showcase.png" alt="Showcase of Globetrotter Products and Services">
+    <br/>
+    <br/>
+    <br/>
+    <div class="about-us-blurb">
+      <h3>About GlobeTrotter</h3>
+      <p>At GlobeTrotter, we're more than just a travel store—we're a community of explorers who believe in meaningful, well-equipped adventures. From rugged hiking packs to curated travel guides, every product we offer is handpicked with care, tested on real journeys, and backed by passionate support. Whether you're planning your first trip or your hundredth, GlobeTrotter is here to help you travel smarter, lighter, and more inspired.</p>
+    </div>
+  </section>
+
+  <section class="slideshow-container">
+    <img src="images/slideshow1.jpg" alt="Travel Gear Display">
+    <img src="images/slideshow2.jpeg" alt="Backpack Adventure">
+    <img src="images/slideshow3.jpg" alt="Packing Essentials">
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </section>
+
+  <section class="intro-text">
+    <h2>Why GlobeTrotter?</h2>
+    <p>Whether you're a seasoned world explorer or planning your first overseas trip, GlobeTrotter is your one-stop destination for high-quality travel essentials. Our team of travel enthusiasts curates the finest gear to help you travel smarter, lighter, and safer. We believe that great gear doesn't just support your journey—it enhances it.</p>
+    <p>With a focus on quality, sustainability, and style, GlobeTrotter offers everything from multifunctional backpacks to universal adapters and region-specific travel guides. Every product in our catalog has been handpicked and tested by travelers like you.</p>
+  </section>
+
+  <section class="benefits">
+    <h2>What Sets Us Apart</h2>
+    <ul>
+      <li><strong>Travel-Tested:</strong> Every product has been field-tested by avid travelers for real-world durability and practicality.</li>
+      <li><strong>Eco-Friendly Options:</strong> Our catalog features sustainable and recyclable materials to reduce travel impact.</li>
+      <li><strong>Expert Advice:</strong> Get curated recommendations from people who travel for a living, not just for vacation.</li>
+      <li><strong>Exclusive Bundles:</strong> Save big with customized travel kits tailored to different types of travelers—adventurers, business nomads, and casual tourists.</li>
+    </ul>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <img src="images/delivery.png" alt="Free Shipping Icon" class="feature-icon">
+      <h3>Free Worldwide Shipping</h3>
+      <p>Enjoy fast, free delivery on all orders over $50, no matter where you're headed next.</p>
+    </div>
+    <div class="feature">
+      <img src="images/quality.png" alt="Premium Quality Icon" class="feature-icon">
+      <h3>Premium Quality Gear</h3>
+      <p>Built to last through every airport, backpacking trek, or cruise adventure you take.</p>
+    </div>
+    <div class="feature">
+      <img src="images/support.png" alt="Customer Support Icon" class="feature-icon">
+      <h3>24/7 Support</h3>
+      <p>Need help picking the right gear? Have a question about your order? We're here 24/7.</p>
+    </div>
+  </section>
+
+  <section class="top-products">
+    <h2>Popular Picks</h2>
+    <p>Our best-selling items that travelers can't stop talking about:</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="images/backpack.jpg" alt="Traveler Backpack">
+        <h4>Traveler Backpack</h4>
+        <p>$89.99</p>
+        <a href="products.html" class="btn">View Details</a>
+      </div>
+      <div class="product-card">
+        <img src="images/adapter.jpg" alt="Universal Adapter">
+        <h4>Universal Adapter</h4>
+        <p>$14.99</p>
+        <a href="products.html" class="btn">View Details</a>
+      </div>
+      <div class="product-card">
+        <img src="images/organizer.jpeg" alt="Packing Organizer Set">
+        <h4>Packing Organizer Set</h4>
+        <p>$24.99</p>
+        <a href="products.html" class="btn">View Details</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <h2>What Travelers Say</h2>
+    <blockquote>
+      <p>"I used the GlobeTrotter backpack through five countries in 30 days. Lightweight, sturdy, and smartly designed. Highly recommend it!"</p>
+      <footer>- Rachel A., Toronto</footer>
+    </blockquote>
+    <blockquote>
+      <p>"Their customer service team helped me get a last-minute delivery before my flight. Incredible service!"</p>
+      <footer>- Jamal B., New York</footer>
+    </blockquote>
+  </section>
+
+  <section class="newsletter">
+    <h2>Stay In The Loop</h2>
+    <p>Sign up for travel tips, product updates, and exclusive offers delivered to your inbox.</p>
+    <form id="newsletter-form">
+      <input type="email" placeholder="Enter your email" required>
+      <button type="submit" class="btn">Subscribe</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store. All rights reserved.</p>
+  </footer>
+</body>
+</html>
