@@ -1,39 +1,67 @@
-// auth.js
-// Fake user database
-const fakeUser = {
-  email: "user@example.com",
-  password: "pass123",
-  name: "John Doe",
-  isLoggedIn: false
-};
+let userList = [];
 
-// Save default user (only once)
-if (!localStorage.getItem("user")) {
-  localStorage.setItem("user", JSON.stringify(fakeUser));
-}
+// Load users from PHP
+fetch("get_users.php")
+  .then((res) => res.json())
+  .then((data) => {
+    userList = data;
+  })
+  .catch((err) => {
+    console.error("Failed to fetch users:", err);
+  });
 
-// Login function
+// Replace localStorage → sessionStorage
 function login(email, password) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = userList.find(
+    (u) => u.email === email && u.password === password
+  );
 
-  if (user.email === email && user.password === password) {
+  if (user) {
     user.isLoggedIn = true;
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
     return true;
   }
   return false;
 }
 
-// Logout function
 function logout() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  user.isLoggedIn = false;
-  localStorage.setItem("user", JSON.stringify(user));
-  window.location.href = "homepage.html"; // or login.html
+  sessionStorage.removeItem("user");
+  window.location.href = "login.html";
 }
 
-// Check if user is logged in
 function isAuthenticated() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
   return user?.isLoggedIn === true;
 }
+
+function isAdmin() {
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  return user?.isLoggedIn && user?.isAdmin === "1";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nav = document.querySelector("nav ul");
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  // Clear out any previous "Login" or "Logout" item (if dynamically injected)
+  const loginLogoutItem = document.getElementById("login-logout");
+  if (loginLogoutItem) loginLogoutItem.remove();
+
+  const li = document.createElement("li");
+  li.id = "login-logout";
+
+  if (user?.isLoggedIn) {
+    // Logged in: Show "Logout (name)"
+    li.innerHTML = `<a href="#" id="logoutLink">Logout (${user.firstName || "User"})</a>`;
+    nav.appendChild(li);
+
+    document.getElementById("logoutLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      logout();
+    });
+  } else {
+    // Not logged in: Show Login
+    li.innerHTML = `<a href="login.html">Login</a>`;
+    nav.appendChild(li);
+  }
+});

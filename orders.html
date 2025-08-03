@@ -5,23 +5,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Orders | GlobeTrotter Store</title>
+  <meta name="description" content="View your past and current GlobeTrotter orders, track shipping status, and manage your travel gear purchases in one place.">
+  <meta name="keywords" content="my orders, order history, GlobeTrotter account, travel gear orders, order tracking, travel store account">
+  <meta name="author" content="GlobeTrotter Team">
   <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="theme.js" defer></script>
+
 </head>
 <body>
   <header>
     <h1>My Orders</h1>
     <nav>
-      <ul>
-        <li><a href="homepage.html">Home</a></li>
-        <li><a href="newsletter.html">Newsletter</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="orders.html">My Orders</a></li>
-        <li><a href="help.html">Help</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+    <li id="login-logout" style="display:none;"></li>
+
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
   </header>
 
   <main>

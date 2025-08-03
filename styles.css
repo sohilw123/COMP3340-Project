@@ -69,7 +69,6 @@ nav ul li a:hover {
 .hero {
   text-align: center;
   padding: 3rem 2rem;
-  background-image: url('images/banner.jpg');
   background-size: cover;
   background-position: center;
   color: rgb(0, 0, 0);
@@ -192,3 +191,26 @@ nav ul li a:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+#themeSelect {
+  margin-top: 1rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+#themeSelect:hover {
+  background-color: #f0f0f0;
+  border-color: #888;
+}
+
+#themeSelect:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.2);

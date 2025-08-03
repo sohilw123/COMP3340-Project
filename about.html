@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help Wiki - GlobeTrotter Store</title>
+  <meta name="description" content="Find answers to frequently asked questions, product guides, and support resources for GlobeTrotter travel gear and services.">
+  <meta name="keywords" content="travel help, FAQ, product support, GlobeTrotter help, shipping, returns, gear usage, travel guide">
+  <meta name="author" content="GlobeTrotter Support Team">
+  <link rel="stylesheet" href="styles.css">
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="theme.js" defer></script>
+  
+  <style>
+    .wiki-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    h2 {
+      text-align: center;
+    }
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-arrow:disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    #prev-btn { left: -3rem; }
+    #next-btn { right: -3rem; }
+  </style>
+</head>
+<body>
+    <header>
+  <h1>GlobeTrotter Store</h1>
+  <nav>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+<li id="login-logout" style="display:none;"></li>
+
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
+</header>
+  <p>🧭 About GlobeTrotter Store </br>
+GlobeTrotter Store is a dynamic and user-friendly e-commerce platform designed for adventurous travelers and everyday explorers. The project showcases a variety of travel-related products such as backpacks, 
+guides, accessories, and gear, each presented with interactive features like variant selection, live pricing updates, customer reviews, and detailed descriptions. Built using HTML, CSS, JavaScript, PHP, and MySQL, 
+the site demonstrates full client-server interaction with database-driven content, user-friendly navigation, and contextual help. The goal is to create an immersive shopping experience that is both visually engaging
+ and technically robust, simulating the kind of product catalog and purchasing flow you'd expect from a modern online retail site.</p>
+  <div class="wiki-container">
+    <button id="prev-btn" class="nav-arrow">&#8592;</button>
+    <button id="next-btn" class="nav-arrow">&#8594;</button>
+    <div id="wiki-content">
+      <!-- Dynamic wiki content goes here -->
+    </div>
+  </div>
+
+  <script>
+    const pages = [
+      {
+        title: "Getting Started",
+        content: `
+          <p>Welcome to the GlobeTrotter Store! This guide will help you understand how to browse and interact with the platform.</p>
+          <ul>
+            <li>Browse products by category</li>
+            <li>View product variants and descriptions</li>
+            <li>Add items to your cart</li>
+            <li>View reviews from other users</li>
+            <li>Checkout and track orders</li>
+          </ul>
+          <p><strong>Navigation Tips:</strong></p>
+          <ul>
+            <li>Use the top navigation bar to explore categories.</li>
+            <li>Click on any product to view its details and available variants.</li>
+            <li>Hover over “Help” in the corner of any section for contextual assistance.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Product Page Help",
+        content: `
+          <p>The <strong>Product Page</strong> allows you to explore a specific item in detail.</p>
+          <ul>
+            <li>View images and descriptions</li>
+            <li>Switch between variants</li>
+            <li>See pricing updates</li>
+            <li>Read reviews</li>
+            <li>Add to cart</li>
+          </ul>
+        `
+      },
+      {
+        title: "Variant Selection Guide",
+        content: `
+          <p>Steps to select a variant:</p>
+          <ol>
+            <li>Go to the product detail page.</li>
+            <li>Use the dropdown labeled (e.g., “Size”, “Edition”, or “Color”).</li>
+            <li>The product information updates instantly.</li>
+          </ol>
+          <p><strong>Troubleshooting:</strong> Refresh or try again if variants don't load.</p>
+        `
+      },
+      {
+        title: "Shopping Cart & Checkout",
+        content: `
+          <p><strong>Adding Items:</strong> Click "Add to Cart" after selecting a variant.</p>
+          <p><strong>Viewing Cart:</strong> Click the cart icon to view items and total.</p>
+          <p><strong>Checkout:</strong> Enter details, confirm, and place your order.</p>
+        `
+      },
+      {
+        title: "Support & Troubleshooting",
+        content: `
+          <p><strong>Common Issues:</strong></p>
+          <ul>
+            <li>Page not loading: refresh and check connection.</li>
+            <li>Dropdown empty: JavaScript might be disabled.</li>
+            <li>Order errors: verify payment details.</li>
+          </ul>
+          <p><strong>Contact:</strong> support@globetrottstore.com | Live Chat (9am-5pm EST)</p>
+        `
+      }
+    ];
+
+    let currentPage = 0;
+    const contentDiv = document.getElementById("wiki-content");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    function renderPage(index) {
+      contentDiv.innerHTML = `
+        <h2>${pages[index].title}</h2>
+        ${pages[index].content}
+      `;
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === pages.length - 1;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 0) {
+        currentPage--;
+        renderPage(currentPage);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        renderPage(currentPage);
+      }
+    });
+
+    renderPage(currentPage);
+  </script>
+  
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -5,8 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | GlobeTrotter Store</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Log in to your GlobeTrotter account to manage your orders, track shipments, and access your personalized travel gear experience.">
+  <meta name="keywords" content="login, GlobeTrotter login, customer account, travel gear login, access account, order tracking">
+  <meta name="author" content="GlobeTrotter Team">
+  <link rel="stylesheet" href="styles.css">
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
   <script src="auth.js" defer></script>
+  <script src="theme.js" defer></script>
   <style>
     .login-wrapper {
       display: flex;
@@ -15,11 +21,9 @@
       padding-top: 5rem;
       padding-bottom: 4rem;
       min-height: calc(100vh - 160px); /* Adjust for header/footer height */
-      background-color: #eef5fb;
     }
 
     .login-container {
-      background: white;
       padding: 2.5rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -79,16 +83,27 @@
   <header>
     <h1>GlobeTrotter Store</h1>
     <nav>
-      <ul>
-        <li><a href="homepage.html">Home</a></li>
-        <li><a href="newsletter.html">Newsletter</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="orders.html">My Orders</a></li>
-        <li><a href="help.html">Help</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+    <li id="login-logout" style="display:none;"></li>
+
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
   </header>
 
   <main class="login-wrapper">

@@ -1,42 +1,30 @@
-<!-- newsletter.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weekly Newsletter | GlobeTrotter</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="scipts.js"></script>
-  <script src="auth.js"></script>
-<script>
-  if (!isAuthenticated()) {
-    alert("Please log in to access this page.");
-    window.location.href = "login.html";
-  }
-</script>
-
-<script>
-  if (!isAuthenticated()) {
-    alert("Please log in to access this page.");
-    window.location.href = "login.html";
-  }
-</script>
+  <meta name="description" content="Stay up to date with GlobeTrotter's weekly newsletter. Discover travel gear tips, destination features, and exclusive product updates." />
+  <meta name="keywords" content="GlobeTrotter newsletter, travel tips, travel news, product updates, travel blog, weekly digest" />
+  <meta name="author" content="GlobeTrotter Team" />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="styles.css">
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="theme.js" defer></script>
   <style>
     .newsletter-container {
       max-width: 600px;
       margin: auto;
-      background: white;
       padding: 3rem 2rem 2rem 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       border-radius: 8px;
     }
-    .newsletter-container h1 {
+    .newsletter-container h2 {
       text-align: center;
-      color: #004080;
     }
     .newsletter-container p {
       font-size: 1rem;
-      color: #444;
       text-align: center;
     }
     form {
@@ -70,27 +58,35 @@
   <header>
     <h1>GlobeTrotter Store</h1>
     <nav>
-      <ul>
-        <li><a href="homepage.html">Home</a></li>
-        <li><a href="newsletter.html">Newsletter</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="orders.html">My Orders</a></li>
-        <li><a href="help.html">Help</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
-  </header>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+    <li id="login-logout" style="display:none;"></li>
 
-  <br/>
-  <br/>
-  <br/>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
+  </header>
+  <br>
 
   <main class="newsletter-container">
     <h2>Subscribe to Our Weekly Newsletter</h2>
     <p>Get the latest travel tips, gear reviews, exclusive offers, and destination highlights delivered every week.</p>
-    <form>
-      <input type="email" placeholder="Enter your email address" required />
+    <form id="newsletter-form" method="POST" action="homepage.html">
+      <input type="email" id="email-input" name="email" placeholder="Enter your email address" required />
       <br />
       <button type="submit">Subscribe</button>
     </form>
@@ -99,5 +95,29 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store. All rights reserved.</p>
   </footer>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Wait for auth.js to load and then run login check
+    if (typeof isAuthenticated !== "function") {
+      console.error("auth.js not loaded");
+      return;
+    }
+
+    if (!isAuthenticated()) {
+      alert("Please log in to access this page.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    // Pre-fill the email if available
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.email) {
+      document.getElementById("email-input").value = user.email;
+    }
+  });
+</script>
+
 </body>
 </html>
+

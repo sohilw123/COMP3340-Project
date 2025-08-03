@@ -7,16 +7,17 @@
   <meta name="description" content="Shop travel gear, gadgets, and guides with GlobeTrotter">
   <meta name="keywords" content="travel, shop, luggage, gear, ecommerce">
   <title>GlobeTrotter | Travel Essentials Store</title>
+  <meta name="description" content="Shop durable travel gear, gadgets, backpacks, organizers, and curated guides. GlobeTrotter equips adventurers for smarter, lighter, and more inspiring journeys.">
+  <meta name="keywords" content="travel gear, backpacks, packing cubes, travel store, luggage accessories, universal adapter, GlobeTrotter">
+  <meta name="author" content="GlobeTrotter Team">
   <link rel="icon" href="images/favicon.ico">
   <link rel="stylesheet" href="styles.css">
   <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
-  <script src="scripts.js" defer></script>
+<script src="scripts.js" defer></script>
 
-<select id="themeSelect">
-  <option value="theme-light.css">Light</option>
-  <option value="theme-dark.css">Dark</option>
-  <option value="theme-blue.css">Blue</option>
-</select>
+<script src="auth.js" defer></script>
+
+  <script src="theme.js" defer></script>
 
   <style>
     .slideshow-container {
@@ -50,6 +51,70 @@
     .prev:hover, .next:hover {
       background-color: rgba(0, 0, 0, 0.8);
     }
+    
+    #themeSelect {
+  margin-top: 1rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+#themeSelect:hover {
+  background-color: #f0f0f0;
+  border-color: #888;
+}
+
+#themeSelect:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.2);
+  
+  .video-slideshow {
+  position: relative;
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+
+.video-slide {
+  width: 100%;
+  display: none;
+  border-radius: 8px;
+}
+
+.prev-video, .next-video {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.next-video {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev-video:hover, .next-video:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+}
+
   </style>
   <script>
     let slideIndex = 0;
@@ -75,21 +140,34 @@
   </script>
 
 </head>
+
 <body>
   <header>
-    <h1>GlobeTrotter Store - test</h1>
-    <nav>
-      <ul>
-        <li><a href="homepage.html">Home</a></li>
-        <li><a href="newsletter.html">Newsletter</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="orders.html">My Orders</a></li>
-        <li><a href="help.html">Help</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
-  </header>
+  <h1>GlobeTrotter Store</h1>
+  <nav>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+<li id="login-logout" style="display:none;"></li>
+
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
+</header>
+
 
   
 
@@ -153,6 +231,50 @@
       <p>Need help picking the right gear? Have a question about your order? We're here 24/7.</p>
     </div>
   </section>
+  
+  <section class="slideshow-container video-slideshow">
+  <div class="video-slide">
+    <iframe width="100%" height="500" src="https://www.youtube.com/embed/PSeIPlLFhjo" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div class="video-slide">
+    <iframe width="100%" height="500" src="https://www.youtube.com/embed/uh3dI8u7KKw" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div class="video-slide">
+    <iframe width="100%" height="500" src="https://www.youtube.com/embed/wl7sglT1Mto" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <a class="prev-video" onclick="plusVideoSlides(-1)">&#10094;</a>
+  <a class="next-video" onclick="plusVideoSlides(1)">&#10095;</a>
+  
+  <script>
+  let videoIndex = 0;
+  let videoSlides;
+
+  function showVideoSlide(n) {
+    videoSlides.forEach((slide, index) => {
+      slide.style.display = index === n ? "block" : "none";
+      if (slide.tagName === "VIDEO") slide.pause(); // Stop any playing video
+    });
+    if (videoSlides[n].tagName === "VIDEO") {
+      videoSlides[n].currentTime = 0;
+    }
+  }
+
+  function plusVideoSlides(n) {
+    videoIndex += n;
+    if (videoIndex >= videoSlides.length) videoIndex = 0;
+    if (videoIndex < 0) videoIndex = videoSlides.length - 1;
+    showVideoSlide(videoIndex);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    videoSlides = document.querySelectorAll(".video-slideshow .video-slide");
+    showVideoSlide(videoIndex);
+  });
+</script>
+
+</section>
+
 
   <section class="top-products">
     <h2>Popular Picks</h2>
@@ -205,3 +327,4 @@
   </footer>
 </body>
 </html>
+

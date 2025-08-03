@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Title & SEO Meta Tags -->
+  <title>Service Monitoring Dashboard | GlobeTrotter Store</title>
+  <meta name="description" content="Monitor the real-time operational status of GlobeTrotter Store services including website, login, database, and API availability. Stay informed with live uptime tracking.">
+  <meta name="keywords" content="service monitoring, dashboard, system status, uptime, GlobeTrotter system, API monitoring, travel store status">
+  <meta name="author" content="GlobeTrotter Technical Team">
+  <link rel="stylesheet" href="styles.css">
+  <link id="themeStylesheet" rel="stylesheet" href="css/theme-light.css" />
+  <script src="scripts.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="theme.js" defer></script>
+  <style>
+    h1 {
+      text-align: center;
+    }
+    table {
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .status-online {
+      color: green;
+      font-weight: bold;
+    }
+    .status-offline {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <h1>GlobeTrotter Store</h1>
+    <nav>
+    <ul>
+      <li><a href="homepage.html">Home</a></li>
+      <li><a href="newsletter.html">Newsletter</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="monitor.html">Monitor</a></li>
+      <li><a href="admin.php">Admin</a></li>
+      <!-- This will be injected dynamically by auth.js -->
+    <li id="login-logout" style="display:none;"></li>
+
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <select id="themeSelect">
+        <option value="theme-light.css">Light</option>
+        <option value="theme-dark.css">Dark</option>
+        <option value="theme-blue.css">Blue</option>
+    </select>
+  </nav>
+  </header>
+  
+  <h1>Service Monitoring Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>URL</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="statusTable">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    fetch('status.php')
+      .then(response => response.json())
+      .then(data => {
+        const table = document.getElementById("statusTable");
+        table.innerHTML = "";
+        data.forEach(service => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${service.name}</td>
+            <td><a href="${service.url}" target="_blank">${service.url}</a></td>
+            <td class="status-${service.status}">${service.status.toUpperCase()}</td>
+          `;
+          table.appendChild(row);
+        });
+      })
+      .catch(error => {
+        const table = document.getElementById("statusTable");
+        table.innerHTML = `<tr><td colspan="3" style="color:red;">Error loading service status.</td></tr>`;
+        console.error("Error:", error);
+      });
+  </script>
+  <footer>
+    <p>&copy; 2025 GlobeTrotter Store. All rights reserved.</p>
+  </footer>
+</body>
+</html>
