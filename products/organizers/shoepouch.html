@@ -5,58 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foldable Shoe Pouch Organizer | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-      const variantSelect = document.getElementById("variant");
-      const productImage = document.getElementById("product-image");
-      const price = document.getElementById("price");
-      const description = document.getElementById("description");
-      const reviewsContainer = document.getElementById("reviews");
-
-      const variants = {
-        grey: {
-          img: "../../images/organizers/Shoe Pouch/shoe-pouch-grey.jpg",
-          price: "$12.99",
-          desc: "A classic grey shoe pouch that keeps footwear neatly separated from clean clothes. Folds flat and fits easily in carry-ons.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Perfect for organizing shoes without dirtying my clothes. Lightweight and neat!", author: "Tanya L." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Took this to Spain and used it every day. Great size and folds up nicely.", author: "Omar G." }
-          ]
-        },
-        red: {
-          img: "../../images/organizers/Shoe Pouch/shoe-pouch-red.jpg",
-          price: "$12.99",
-          desc: "Stand out with this bold red travel shoe pouch. Water-resistant and breathable — ideal for sporty or stylish trips.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Love the color! It’s easy to find in my bag and keeps things fresh.", author: "Marina T." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Stylish and super practical. Red looks great with the rest of my travel gear.", author: "Kris V." }
-          ]
-        }
-      };
-
-      function updateContent(selected) {
-        const variant = variants[selected];
-        productImage.src = variant.img;
-        price.textContent = variant.price;
-        description.textContent = variant.desc;
-
-        // Update reviews
-        reviewsContainer.innerHTML = "";
-        variant.reviews.forEach(review => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
-          reviewsContainer.appendChild(article);
-        });
-      }
-
-      // Initialize with default
-      updateContent(variantSelect.value);
-
-      variantSelect.addEventListener("change", function () {
-        updateContent(variantSelect.value);
-      });
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -106,10 +54,7 @@
 
     <div class="product-info">
       <label for="variant"><strong>Select Color:</strong></label>
-      <select id="variant">
-        <option value="grey">Grey</option>
-        <option value="red">Red</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -136,5 +81,71 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 17; // <-- Update if needed
+    let variantData = {};
+
+    async function fetchVariants() {
+      try {
+        const res = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await res.json();
+
+        if (result.status !== "success") {
+          console.error("Variant load failed:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: variant.variant_name,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant(); // Load first variant
+      } catch (err) {
+        console.error("Error fetching variants:", err);
+      }
+    }
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = variantData[selected];
+      if (!data) return;
+
+      document.getElementById("product-image").src = data.img;
+      document.getElementById("product-image").alt = data.alt;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const qty = parseInt(document.getElementById("quantity").value);
+      alert(`${qty} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

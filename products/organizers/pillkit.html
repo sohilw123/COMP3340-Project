@@ -5,67 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pill Organizer + Emergency Kit Pouch | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-      const variantSelect = document.getElementById("variant");
-      const productImage = document.getElementById("product-image");
-      const price = document.getElementById("price");
-      const description = document.getElementById("description");
-      const reviewsContainer = document.getElementById("reviews");
-
-      const variants = {
-        black: {
-          img: "../../images/organizers/Pill Organizer/pill-organizer-black.jpg",
-          price: "$16.99",
-          desc: "A sleek black pill organizer pouch with a first-aid section, perfect for everyday carry and travel.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Everything in one place—pills, first aid, and peace of mind. Love it!", author: "Sean R." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Perfect for flights and road trips. Fits in any backpack pocket.", author: "Ana K." }
-          ]
-        },
-        pink: {
-          img: "../../images/organizers/Pill Organizer/pill-organizer-pink.jpg",
-          price: "$16.99",
-          desc: "A bright and cheerful pink case that adds style to your travel essentials without sacrificing function.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Super cute and super functional. Everything I need fits perfectly.", author: "Jenny M." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Love the color and layout. Makes organizing meds a breeze!", author: "Claire S." }
-          ]
-        },
-        teal: {
-          img: "../../images/organizers/Pill Organizer/pill-organizer-teal.jpg",
-          price: "$16.99",
-          desc: "A modern teal design with waterproof lining, ideal for outdoor trips or longer vacations.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Teal is my favorite and this bag does it all. Highly recommend!", author: "Raymond G." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Great layout, great color, and keeps things tidy.", author: "Fiona L." }
-          ]
-        }
-      };
-
-      function updateContent(selected) {
-        const variant = variants[selected];
-        productImage.src = variant.img;
-        price.textContent = variant.price;
-        description.textContent = variant.desc;
-
-        // Update reviews
-        reviewsContainer.innerHTML = "";
-        variant.reviews.forEach(review => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
-          reviewsContainer.appendChild(article);
-        });
-      }
-
-      // Initialize with default selection
-      updateContent(variantSelect.value);
-
-      variantSelect.addEventListener("change", function () {
-        updateContent(variantSelect.value);
-      });
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -115,11 +54,7 @@
 
     <div class="product-info">
       <label for="variant"><strong>Select Color:</strong></label>
-      <select id="variant">
-        <option value="black">Black</option>
-        <option value="pink">Pink</option>
-        <option value="teal">Teal</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -146,5 +81,72 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 15; // Adjust if necessary
+    let variantData = {};
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Pill Kit - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant(); // Load first variant
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = variantData[selected];
+      if (!data) return;
+
+      document.getElementById("product-image").src = data.img;
+      document.getElementById("product-image").alt = data.alt;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

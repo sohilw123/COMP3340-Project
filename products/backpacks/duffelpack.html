@@ -55,13 +55,11 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="product-image" src="../../images/backpacks/DuffelPack/duffelpack_black.jpg" alt="DuffelPack - Black">
+      <img id="product-image" src="" alt="DuffelPack Image" />
       
       <div class="product-info">
-        <h2 id="price">$129.99</h2>
-        <p id="product-description">
-          Adapt to any travel scenario with the Black All-Terrain Convertible Duffel-Pack. Rugged and discreet, this edition blends into city streets and wild trails alike.
-        </p>
+        <h2 id="price">$0.00</h2>
+        <p id="product-description">Loading description...</p>
 
         <ul>
           <li>60L expandable capacity with reinforced base</li>
@@ -72,13 +70,7 @@
         </ul>
 
         <label for="variant">Color:</label>
-        <select id="variant" onchange="updateProduct()">
-          <option value="black">Black</option>
-          <option value="blue">Blue</option>
-          <option value="green">Green</option>
-          <option value="pink">Pink</option>
-          <option value="white">White</option>
-        </select>
+        <select id="variant" onchange="updateProduct()"></select>
 
         <label for="quantity">Quantity:</label>
         <input type="number" id="quantity" name="quantity" value="1" min="1">
@@ -89,10 +81,7 @@
 
     <section class="product-reviews">
       <h3>Customer Reviews</h3>
-      <div id="review-container">
-        <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Used this on a cross-country trip—held up through everything. Super flexible storage.” — Samir L.</p></article>
-        <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Great versatility, though it’s a bit big when fully packed. Straps are comfy!” — Dana W.</p></article>
-      </div>
+      <div id="review-container"></div>
     </section>
   </main>
 
@@ -101,72 +90,71 @@
   </footer>
 
   <script>
-    const productData = {
-      black: {
-        img: "../../images/backpacks/DuffelPack/duffelpack_black.jpg",
-        description: "Adapt to any travel scenario with the Black All-Terrain Convertible Duffel-Pack. Rugged and discreet, this edition blends into city streets and wild trails alike.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Used this on a cross-country trip—held up through everything. Super flexible storage.” — Samir L.",
-          "⭐️⭐️⭐️⭐️ “Great versatility, though it’s a bit big when fully packed. Straps are comfy!” — Dana W."
-        ]
-      },
-      blue: {
-        img: "../../images/backpacks/DuffelPack/duffelpack_blue.jpg",
-        description: "The Blue edition adds a splash of energy to your travel. Stand out in airports while enjoying the same rugged versatility.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Love the color! It’s eye-catching but still professional enough for business trips.” — Rachel Z.",
-          "⭐️⭐️⭐️⭐️ “Everything fits and the zippers are top-notch.” — Tom D."
-        ]
-      },
-      green: {
-        img: "../../images/backpacks/DuffelPack/duffelpack_green.jpg",
-        description: "The Green Duffel-Pack is perfect for nature lovers. Blends into the wild with eco-inspired tones.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Perfect for hiking. The green color doesn't attract dirt easily either.” — Leo S.",
-          "⭐️⭐️⭐️⭐️ “Looks good and feels durable. Straps are great.” — Zoe M."
-        ]
-      },
-      pink: {
-        img: "../../images/backpacks/DuffelPack/duffelpack_pink.jpg",
-        description: "Make a bold statement with the Pink Duffel-Pack. Designed for travelers who like function with flair.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “So cute and rugged! Tons of compliments at the airport.” — Gina R.",
-          "⭐️⭐️⭐️⭐️ “Strong, stylish, and super spacious.” — Mandy K."
-        ]
-      },
-      white: {
-        img: "../../images/backpacks/DuffelPack/duffelpack_white.jpg",
-        description: "Clean, crisp, and ready for any adventure — the White Duffel-Pack is for the minimalist traveler.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Looks great in photos and easy to spot in baggage claim.” — Andy L.",
-          "⭐️⭐️⭐️⭐️ “I was worried about dirt, but it's easy to wipe clean.” — Mira H."
-        ]
+    let variantData = {};
+    const productId = 1;
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase();
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            description: variant.description,
+            price: parseFloat(variant.price).toFixed(2),
+            reviews: variant.reviews // ✅ used as-is
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateProduct();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateProduct() {
-      const variant = document.getElementById('variant').value;
-      const data = productData[variant];
+      const variant = document.getElementById("variant").value;
+      const data = variantData[variant];
+      if (!data) return;
 
-      document.getElementById('product-image').src = data.img;
-      document.getElementById('product-image').alt = `DuffelPack - ${variant}`;
-      document.getElementById('product-description').textContent = data.description;
+      document.getElementById("product-image").src = data.img;
+      document.getElementById("product-image").alt = `DuffelPack - ${variant}`;
+      document.getElementById("product-description").textContent = data.description;
+      document.getElementById("price").textContent = `$${data.price}`;
 
-      const reviewContainer = document.getElementById('review-container');
-      reviewContainer.innerHTML = ""; // Clear existing
+      const reviewContainer = document.getElementById("review-container");
+      reviewContainer.innerHTML = "";
 
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> ${review.split(" “")[1]}</p>`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewContainer.appendChild(article);
       });
     }
 
     function addToCart(productId) {
-      const quantity = document.getElementById('quantity').value;
-      const variant = document.getElementById('variant').value;
+      const quantity = document.getElementById("quantity").value;
+      const variant = document.getElementById("variant").value;
       alert(`Added ${quantity} x ${productId} (${variant}) to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>

@@ -49,19 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/backpacks/UrbanExplorer/urbanexplorer_black.jpg" alt="Urban Explorer Black">
+      <img id="productImage" src="" alt="Urban Explorer Variant">
     </div>
 
     <div class="product-info">
-      <h2>$74.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Color:</label>
-      <select id="variant" onchange="updateVariant()">
-        <option value="black">Black</option>
-        <option value="green">Green</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">The perfect companion for the urban professional or student. The Urban Explorer Slim Laptop Backpack combines minimalist design with modern functionality, keeping your essentials organized without unnecessary bulk.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Fits laptops up to 17"</li>
@@ -79,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Stylish, practical, and really well built. Great for commuting!” — Carlos M.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Sleek design and fits perfectly under airplane seats. Great value.” — Priya S.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -90,40 +84,60 @@
   </footer>
 
   <script>
-    const productData = {
-      black: {
-        img: "../../images/backpacks/UrbanExplorer/urbanexplorer_black.jpg",
-        alt: "Urban Explorer Black",
-        description: "The perfect companion for the urban professional or student. The Urban Explorer Slim Laptop Backpack combines minimalist design with modern functionality, keeping your essentials organized without unnecessary bulk.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Stylish, practical, and really well built. Great for commuting!” — Carlos M.",
-          "⭐️⭐️⭐️⭐️ “Sleek design and fits perfectly under airplane seats. Great value.” — Priya S."
-        ]
-      },
-      green: {
-        img: "../../images/backpacks/UrbanExplorer/urbanexplorer_green.jpg",
-        alt: "Urban Explorer Green",
-        description: "Add a touch of bold color to your daily commute with the green edition of the Urban Explorer. Same great storage and security with a sleek green finish.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “I love the green color—it stands out but still looks professional.” — Hannah W.",
-          "⭐️⭐️⭐️⭐️ “Nice backpack with a surprising amount of room. The USB feature is handy.” — Omar L."
-        ]
+    let variantData = {};
+    const productId = 6; // Rucksack product ID
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Rucksack - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = productData[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -132,6 +146,8 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>

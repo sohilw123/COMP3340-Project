@@ -5,71 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>City Explorer Travel Guide | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const editionSelect = document.getElementById("edition");
-      const img = document.getElementById("guide-image");
-      const price = document.getElementById("price");
-      const desc = document.getElementById("description");
-      const reviews = document.getElementById("reviews");
+  <style>
+    .product-detail {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1rem;
+    }
 
-      const editions = {
-        city: {
-          img: "../../images/travel guides/City Explorer/nyt-explorer-city.jpg",
-          price: "$13.50",
-          description:
-            "<em>City Explorer: NYC Edition</em> takes you through Manhattan, Brooklyn, and Queens with curated walking tours, food markets, historic landmarks, and subway tips to navigate the city like a pro.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "Loved the hidden rooftop cafes! Perfect for first-time NYC visitors.",
-              author: "Julia S."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Very walkable guides and great food suggestions. Battery Park walk was awesome.",
-              author: "Marco V."
-            }
-          ]
-        },
-        beaches: {
-          img: "../../images/travel guides/City Explorer/nyt-explorer-beaches.jpg",
-          price: "$14.25",
-          description:
-            "<em>City Explorer: NYC Beaches</em> is your insider guide to sun-soaked escapes in and around New York. Explore Rockaway, Coney Island, and beyond—complete with surf spots, beach eats, and ferry routes.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "Took this to Rockaway and loved the taco shack recommendation!",
-              author: "Leah T."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Great balance of maps, tips, and local eats. Lifesaver for weekend escapes.",
-              author: "Nathan P."
-            }
-          ]
-        }
-      };
+    .product-display img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
 
-      function updateContent(edition) {
-        const data = editions[edition];
-        img.src = data.img;
-        price.textContent = data.price;
-        desc.innerHTML = data.description;
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
 
-        reviews.innerHTML = "";
-        data.reviews.forEach((r) => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
-          reviews.appendChild(article);
-        });
-      }
-
-      updateContent(editionSelect.value);
-      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
-    });
-  </script>
+    .product-reviews {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -92,10 +54,7 @@
 
     <div class="product-info">
       <label for="edition"><strong>Select Edition:</strong></label>
-      <select id="edition">
-        <option value="city" selected>City Edition</option>
-        <option value="beaches">Beaches Edition</option>
-      </select>
+      <select id="edition" onchange="updateEdition()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -121,5 +80,70 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 20; // Update this if needed
+    const editions = {};
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== "success") {
+          console.error("Error fetching variants:", result.message);
+          return;
+        }
+
+        const editionSelect = document.getElementById("edition");
+        editionSelect.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+          editions[key] = {
+            img: `../../${variant.image}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          editionSelect.appendChild(option);
+        });
+
+        updateEdition();
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateEdition() {
+      const key = document.getElementById("edition").value;
+      const data = editions[key];
+      if (!data) return;
+
+      document.getElementById("guide-image").src = data.img;
+      document.getElementById("guide-image").alt = `City Explorer - ${key}`;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").innerHTML = data.description;
+
+      const reviewsContainer = document.getElementById("reviews");
+      reviewsContainer.innerHTML = "";
+      data.reviews.forEach(r => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${r}</p>`;
+        reviewsContainer.appendChild(article);
+      });
+    }
+
+    function addToCart(id) {
+      const qty = document.getElementById("quantity").value;
+      alert(`${qty} of ${id} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

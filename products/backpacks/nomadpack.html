@@ -49,19 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/backpacks/NomadPack/nomadpack_backpack.jpg" alt="Nomad Pack - Backpack">
+      <img id="productImage" src="" alt="Nomad Pack Image">
     </div>
 
     <div class="product-info">
-      <h2>$99.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Style:</label>
-      <select id="variant" onchange="updateVariant()">
-        <option value="backpack">Backpack</option>
-        <option value="wheels">Wheeled</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">Built for serious adventurers, the Nomad Waterproof Hiking Pack is engineered to withstand the harshest conditions while keeping your gear safe and dry. Perfect for backcountry expeditions, rainy treks, and mountain climbs.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Fully waterproof and mud-resistant shell</li>
@@ -79,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Hiked through three rainstorms—gear stayed completely dry. This pack is a beast.” — Alex D.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Incredible durability, though a bit bulky for day hikes. Great for multi-day trips.” — Leah M.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -90,40 +84,60 @@
   </footer>
 
   <script>
-    const productData = {
-      backpack: {
-        img: "../../images/backpacks/NomadPack/nomadpack_backpack.jpg",
-        alt: "Nomad Pack - Backpack",
-        description: "Built for serious adventurers, the Nomad Backpack is engineered to withstand harsh conditions while keeping your gear safe and dry. Ideal for long treks and wilderness expeditions.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Hiked through three rainstorms—gear stayed completely dry. This pack is a beast.” — Alex D.",
-          "⭐️⭐️⭐️⭐️ “Incredible durability, though a bit bulky for day hikes. Great for multi-day trips.” — Leah M."
-        ]
-      },
-      wheels: {
-        img: "../../images/backpacks/NomadPack/nomadpack_wheels.jpg",
-        alt: "Nomad Pack - Wheeled",
-        description: "Roll with ease through airports and rough trails alike. The wheeled Nomad Pack keeps your essentials dry and mobile, making it perfect for hybrid travel.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Used it for a hiking trip to Costa Rica and wheeled it through town. Super versatile.” — Miguel F.",
-          "⭐️⭐️⭐️⭐️ “Convenient for both urban and rugged use. Love the waterproof feature.” — Kira B."
-        ]
+    let variantData = {};
+    const productId = 5; // Rucksack product ID
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Rucksack - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = productData[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -132,6 +146,8 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>

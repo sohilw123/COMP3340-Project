@@ -49,21 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-15W.jpg" alt="15W Solar Power Bank">
+      <img id="productImage" src="" alt="Solar Power Bank">
     </div>
 
     <div class="product-info">
-      <h2>$39.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Model:</label>
-      <select id="variant" onchange="updatePowerBank()">
-        <option value="15w">15W</option>
-        <option value="28w">28W</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">
-        Charge on the go with the 15W Solar Power Bank. Ideal for day hikes or weekend camping, this compact charger gives you reliable backup using solar energy or USB.
-      </p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>High-capacity 20,000mAh battery</li>
@@ -81,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Took this hiking in the Rockies—kept both my phone and GPS charged the entire weekend!” — Carlos D.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Reliable backup power. Solar charging is slow but handy in emergencies.” — Alina F.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -92,41 +84,61 @@
   </footer>
 
   <script>
-    const powerBankVariants = {
-      "15w": {
-        img: "../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-15W.jpg",
-        alt: "15W Solar Power Bank",
-        description: "Charge on the go with the 15W Solar Power Bank. Ideal for day hikes or weekend camping, this compact charger gives you reliable backup using solar energy or USB.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Took this hiking in the Rockies—kept both my phone and GPS charged the entire weekend!” — Carlos D.",
-          "⭐️⭐️⭐️⭐️ “Reliable backup power. Solar charging is slow but handy in emergencies.” — Alina F."
-        ]
-      },
-      "28w": {
-        img: "../../images/electronics/Portable Solar power Bank/Solar-Power-Bank-28W.jpg",
-        alt: "28W Solar Power Bank",
-        description: "Power up faster with the 28W Solar Power Bank. Great for long treks or group travel, this robust charger features high-efficiency solar cells and rapid charging output.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Used this on a 5-day expedition—charged our drone and two phones!” — Chris Y.",
-          "⭐️⭐️⭐️⭐️ “Charges noticeably faster than the old one. It’s rugged and dependable.” — Naomi T."
-        ]
-      }
-    };
+    let variantData = {};
+    const productId = 10; // Change this to match your DB
 
-    function updatePowerBank() {
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Solar Power Bank - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = powerBankVariants[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
-      const reviewsContainer = document.getElementById("reviews");
-      reviewsContainer.innerHTML = "";
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
-        reviewsContainer.appendChild(article);
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
       });
     }
 
@@ -134,6 +146,9 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>
+

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Universal Travel Adapter | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script src="../../script.js" defer></script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -50,22 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/electronics/Universal Travel Adapter/universal-travel-adapter-35W.jpg" alt="Universal Travel Adapter 35W">
+      <img id="productImage" src="" alt="Universal Adapter" />
     </div>
 
     <div class="product-info">
-      <h2 id="price">$29.99</h2>
+      <h2 id="price">$0.00</h2>
 
       <label for="variant">Choose Power Output:</label>
-      <select id="variant" onchange="updateTravelAdapter()">
-        <option value="35W">35W (Basic)</option>
-        <option value="75W">75W (High-Speed)</option>
-        <option value="100W">100W (Pro Travel)</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">
-        Compact 35W adapter that works globally. Ideal for phones and smaller devices while traveling.
-      </p>
+      <p id="description">Loading...</p>
 
       <ul>
         <li>Compatible with US, UK, EU, AU plugs</li>
@@ -83,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Charged all my devices across Europe and Asia. Highly recommend!” — Priya G.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Compact and works great. Good price too.” — Blake R.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -94,50 +84,60 @@
   </footer>
 
   <script>
-    const variants = {
-      "35W": {
-        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-35W.jpg",
-        price: "$29.99",
-        desc: "Compact 35W adapter that works globally. Ideal for phones and smaller devices while traveling.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Charged all my devices across Europe and Asia. Highly recommend!” — Priya G.",
-          "⭐️⭐️⭐️⭐️ “Compact and works great. Good price too.” — Blake R."
-        ]
-      },
-      "75W": {
-        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-75W.jpg",
-        price: "$39.99",
-        desc: "The 75W version includes faster USB ports—perfect for tablets and dual-device charging.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Used this to charge my iPad and camera in Italy. Very reliable.” — Hannah T.",
-          "⭐️⭐️⭐️⭐️ “More powerful than expected. Handy for groups.” — Nick A."
-        ]
-      },
-      "100W": {
-        img: "../../images/electronics/Universal Travel Adapter/universal-travel-adapter-100W.jpg",
-        price: "$49.99",
-        desc: "The Pro 100W version is built for power users. Charge laptops, tablets, and phones simultaneously with blazing speed.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Charged my MacBook Air, phone, and GoPro all at once. Absolutely essential.” — Kevin Z.",
-          "⭐️⭐️⭐️⭐️ “Premium performance and worth every penny. Travel must-have.” — Sofia L."
-        ]
+    let variantData = {};
+    const productId = 12; // Update to match travel adapter ID in DB
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Universal Travel Adapter - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
-    function updateTravelAdapter() {
-      const selection = document.getElementById("variant").value;
-      const info = variants[selection];
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = variantData[selected];
+      if (!data) return;
 
-      document.getElementById("productImage").src = info.img;
-      document.getElementById("productImage").alt = `Universal Travel Adapter ${selection}`;
-      document.getElementById("price").textContent = info.price;
-      document.getElementById("description").textContent = info.desc;
+      document.getElementById("productImage").src = data.img;
+      document.getElementById("productImage").alt = data.alt;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
-      info.reviews.forEach(r => {
+      data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${r.split(" “")[0]}</strong> “${r.split(" “")[1]}`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -146,6 +146,9 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>
+

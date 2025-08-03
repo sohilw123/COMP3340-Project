@@ -49,19 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-android.jpg" alt="GPS Tracker Android">
+      <img id="productImage" src="" alt="Luggage Tracker Image">
     </div>
 
     <div class="product-info">
-      <h2>$49.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Platform:</label>
-      <select id="variant" onchange="updateTrackerVariant()">
-        <option value="android">Android</option>
-        <option value="apple">Apple</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">Never lose track of your belongings again with the Smart Luggage Tracker. Featuring real-time GPS location and app connectivity for Android, this compact device ensures you know where your luggage is—anywhere in the world.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Real-time GPS tracking via smartphone app</li>
@@ -79,52 +76,70 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Used this on 3 flights—worked perfectly and gave peace of mind.” — Lila K.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Accurate tracking and battery lasted my whole 10-day trip.” — Roman J.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
 
+  <!-- ✅ Dynamic Variant Script -->
   <script>
-    const trackerVariants = {
-      android: {
-        img: "../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-android.jpg",
-        alt: "GPS Tracker Android",
-        description: "Never lose track of your belongings again with the Smart Luggage Tracker. Featuring real-time GPS location and app connectivity for Android, this compact device ensures you know where your luggage is—anywhere in the world.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Used this on 3 flights—worked perfectly and gave peace of mind.” — Lila K.",
-          "⭐️⭐️⭐️⭐️ “Accurate tracking and battery lasted my whole 10-day trip.” — Roman J."
-        ]
-      },
-      apple: {
-        img: "../../images/electronics/Luggage GPS Tracker/luggage-gps-tracker-apple.jpg",
-        alt: "GPS Tracker Apple",
-        description: "Optimized for Apple devices, this Smart Luggage Tracker connects easily via Find My app and Bluetooth, offering seamless GPS location tracking for every trip.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Perfect for my iPhone—connected instantly and tracked flawlessly.” — Andrea P.",
-          "⭐️⭐️⭐️⭐️ “Easy setup and reliable tracking. Battery held up for a full trip to Europe.” — Devon S."
-        ]
-      }
-    };
+    let variantData = {};
+    const productId = 9; // Update based on your actual DB product_id
 
-    function updateTrackerVariant() {
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `GPS Tracker - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = trackerVariants[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
-      const reviewsContainer = document.getElementById("reviews");
-      reviewsContainer.innerHTML = "";
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
-        reviewsContainer.appendChild(article);
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
       });
     }
 
@@ -132,6 +147,9 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>
+

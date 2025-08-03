@@ -5,58 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jewelry Case with Anti-Tangle Compartments | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-      const variantSelect = document.getElementById("variant");
-      const productImage = document.getElementById("product-image");
-      const price = document.getElementById("price");
-      const description = document.getElementById("description");
-      const reviewsContainer = document.getElementById("reviews");
-
-      const variants = {
-        small: {
-          img: "../../images/organizers/Jewelry Case/travel-jewelry-case-small.jpg",
-          price: "$19.99",
-          desc: "Perfect for weekend getaways, this compact jewelry case keeps your essentials organized and tangle-free.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "I used to dread untangling my necklaces—this case is a game changer!", author: "Lila N." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Perfect size and keeps all my jewelry organized. Great for weekend trips.", author: "Bree S." }
-          ]
-        },
-        large: {
-          img: "../../images/organizers/Jewelry Case/travel-jewelry-case-large.jpg",
-          price: "$29.99",
-          desc: "Ideal for extended trips, the large jewelry case offers more compartments to keep all your accessories in order.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Held all my earrings, bracelets, and even a watch. No tangles!", author: "Serena K." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Lots of compartments. Took it on a 2-week trip—no complaints!", author: "Dana P." }
-          ]
-        }
-      };
-
-      function updateContent(selected) {
-        const variant = variants[selected];
-        productImage.src = variant.img;
-        price.textContent = variant.price;
-        description.textContent = variant.desc;
-
-        // Update reviews
-        reviewsContainer.innerHTML = "";
-        variant.reviews.forEach(review => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
-          reviewsContainer.appendChild(article);
-        });
-      }
-
-      // Initialize with default selection
-      updateContent(variantSelect.value);
-
-      variantSelect.addEventListener("change", function () {
-        updateContent(variantSelect.value);
-      });
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -106,10 +54,7 @@
 
     <div class="product-info">
       <label for="variant"><strong>Select Version:</strong></label>
-      <select id="variant">
-        <option value="small">Small (Compact)</option>
-        <option value="large">Large (Spacious)</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -136,5 +81,71 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    let variantData = {};
+    const productId = 13; // Adjust if needed
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Jewelry Case - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = variantData[selected];
+      if (!data) return;
+
+      document.getElementById("product-image").src = data.img;
+      document.getElementById("product-image").alt = data.alt;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const quantity = parseInt(document.getElementById("quantity").value);
+      alert(`${quantity} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

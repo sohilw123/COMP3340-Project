@@ -47,20 +47,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/backpacks/GlobeTrekker45/globetrekker45_black.jpg" alt="GlobeTrekker 45L Black">
+      <img id="productImage" src="" alt="GlobeTrekker Backpack">
     </div>
 
     <div class="product-info">
-      <h2 id="productPrice">$89.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Select Color:</label>
-      <select id="variant" onchange="updateVariant()">
-        <option value="black">Black</option>
-        <option value="green">Green</option>
-        <option value="teal">Teal</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">The ultimate travel companion for adventurers. Designed with durability, comfort, and versatility in mind, the GlobeTrekker 45L Adventure Backpack is ideal for long journeys, weekend hikes, and urban exploration.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Capacity: 45 liters</li>
@@ -78,10 +74,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “This backpack survived my 3-month trip through South America. Great comfort and storage space!” — Ana R.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Good size for weekend trips. Only wish the laptop compartment was a bit more padded.” — Liam T.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -89,49 +82,60 @@
   </footer>
 
   <script>
-    const productData = {
-      black: {
-        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_black.jpg",
-        alt: "GlobeTrekker 45L Black",
-        description: "Classic rugged black finish—perfect for serious treks and stealthy style.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “This backpack survived my 3-month trip through South America. Great comfort and storage space!” — Ana R.",
-          "⭐️⭐️⭐️⭐️ “Good size for weekend trips. Only wish the laptop compartment was a bit more padded.” — Liam T."
-        ]
-      },
-      green: {
-        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_green.jpg",
-        alt: "GlobeTrekker 45L Green",
-        description: "A fresh earthy green perfect for nature lovers and outdoor photographers.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Blends in well with the forest—ideal for nature trails. Plenty of space too!” — Zoe M.",
-          "⭐️⭐️⭐️⭐️ “Durable, comfy, and stylish. Would recommend to any traveler.” — Jason H."
-        ]
-      },
-      teal: {
-        img: "../../images/backpacks/GlobeTrekker45/globetrekker45_teal.jpg",
-        alt: "GlobeTrekker 45L Teal",
-        description: "Bold teal edition for adventurers who want to stand out while staying practical.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Love the teal color! Sturdy, stylish, and holds everything I need.” — Nina P.",
-          "⭐️⭐️⭐️⭐️ “Definitely eye-catching. Great for both city and hiking use.” — Omar F."
-        ]
+    let variantData = {};
+    const productId = 2;
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase();
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `GlobeTrekker 45L ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = productData[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
       data.reviews.forEach(r => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${r.split(" “")[0]}</strong> “${r.split(" “")[1]}`;
+        article.innerHTML = `<p>${r}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -140,6 +144,8 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>

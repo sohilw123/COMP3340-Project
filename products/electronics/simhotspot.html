@@ -49,21 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi6.jpg" alt="WiFi 6 Hotspot">
+      <img id="productImage" src="" alt="Hotspot Image" />
     </div>
 
     <div class="product-info">
-      <h2>$89.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Model:</label>
-      <select id="variant" onchange="updateHotspotVariant()">
-        <option value="wifi6">WiFi 6</option>
-        <option value="wifi7">WiFi 7</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">
-        Stay connected across the globe with the WiFi 6-enabled Worldwide SIM Card & Hotspot. Perfect for business travelers and adventurers alike, this device supports fast international connectivity.
-      </p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Supports 4G LTE in 130+ countries</li>
@@ -81,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Lifesaver on my Europe trip. Shared WiFi with 3 devices and stayed connected everywhere!” — Tania M.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Very easy setup, and the SIM worked in all the countries I visited. Just wish it had USB-C.” — Eric Z.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -92,41 +84,61 @@
   </footer>
 
   <script>
-    const hotspotVariants = {
-      wifi6: {
-        img: "../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi6.jpg",
-        alt: "WiFi 6 Hotspot",
-        description: "Stay connected across the globe with the WiFi 6-enabled Worldwide SIM Card & Hotspot. Perfect for business travelers and adventurers alike, this device supports fast international connectivity.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Lifesaver on my Europe trip. Shared WiFi with 3 devices and stayed connected everywhere!” — Tania M.",
-          "⭐️⭐️⭐️⭐️ “Very easy setup, and the SIM worked in all the countries I visited. Just wish it had USB-C.” — Eric Z."
-        ]
-      },
-      wifi7: {
-        img: "../../images/electronics/SIM & WiFi Hotspot/WiFi-Hotspot-Router-WiFi7.jpg",
-        alt: "WiFi 7 Hotspot",
-        description: "Experience the fastest speeds yet with our latest WiFi 7 Hotspot & SIM device. Ideal for 4K streaming, remote work, and high-bandwidth needs while traveling.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Streaming Netflix in HD from a train in Germany—WiFi 7 is wild.” — Ravi N.",
-          "⭐️⭐️⭐️⭐️ “Next-gen speeds and surprisingly long battery life. Worth the upgrade!” — Cynthia L."
-        ]
-      }
-    };
+    let variantData = {};
+    const productId = 11; // Update if needed
 
-    function updateHotspotVariant() {
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Hotspot - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = hotspotVariants[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
-      const reviewsContainer = document.getElementById("reviews");
-      reviewsContainer.innerHTML = "";
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
-        reviewsContainer.appendChild(article);
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
       });
     }
 
@@ -134,6 +146,8 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>

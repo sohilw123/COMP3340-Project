@@ -5,71 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Backpacking South America Handbook | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const editionSelect = document.getElementById("edition");
-      const img = document.getElementById("handbook-image");
-      const price = document.getElementById("price");
-      const desc = document.getElementById("description");
-      const reviews = document.getElementById("reviews");
-
-      const editions = {
-        third: {
-          img: "../../images/travel guides/Backpacking Handbook/backpacking-handbook-3rdedition.jpg",
-          price: "$22.75",
-          description:
-            "<em>Backpacking South America Handbook — 3rd Edition</em> is your essential guide to exploring the continent. From Andes hikes to Amazon river tours, get real-world advice, budget tips, and cultural insights.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "An essential guide for backpackers! Helped me get around Peru and Bolivia safely.",
-              author: "Luis V."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Loved the hostel recs and offbeat trail suggestions. Great for solo travelers.",
-              author: "Emma R."
-            }
-          ]
-        },
-        fourth: {
-          img: "../../images/travel guides/Backpacking Handbook/backpacking-handbook-4thedition.jpg",
-          price: "$24.50",
-          description:
-            "<em>Backpacking South America Handbook — 4th Edition</em> is fully updated for 2025 with new destinations, revised visa info, and eco-conscious travel tips. Your ultimate companion for exploring South America.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "The 4th edition is even better — updated border rules and amazing off-grid adventures!",
-              author: "Carlos J."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Super detailed, helped me plan my Colombia and Chile itinerary perfectly.",
-              author: "Sofia L."
-            }
-          ]
-        }
-      };
-
-      function updateContent(key) {
-        const data = editions[key];
-        img.src = data.img;
-        price.textContent = data.price;
-        desc.innerHTML = data.description;
-
-        reviews.innerHTML = "";
-        data.reviews.forEach((r) => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
-          reviews.appendChild(article);
-        });
-      }
-
-      updateContent(editionSelect.value);
-      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -119,10 +54,7 @@
 
     <div class="product-info">
       <label for="edition"><strong>Select Edition:</strong></label>
-      <select id="edition">
-        <option value="third">3rd Edition</option>
-        <option value="fourth">4th Edition</option>
-      </select>
+      <select id="edition" onchange="updateEdition()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -149,5 +81,70 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 19; // Update this if different
+    const editionData = {};
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== "success") {
+          console.error("Error fetching variants:", result.message);
+          return;
+        }
+
+        const editionSelect = document.getElementById("edition");
+        editionSelect.innerHTML = "";
+
+        result.data.forEach(edition => {
+          const key = edition.variant_name.toLowerCase().replace(/\s+/g, '');
+          editionData[key] = {
+            img: `../../${edition.image}`,
+            price: parseFloat(edition.price).toFixed(2),
+            description: edition.description,
+            reviews: edition.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = edition.variant_name;
+          editionSelect.appendChild(option);
+        });
+
+        updateEdition();
+      } catch (error) {
+        console.error("Fetch failed:", error);
+      }
+    }
+
+    function updateEdition() {
+      const selected = document.getElementById("edition").value;
+      const data = editionData[selected];
+      if (!data) return;
+
+      document.getElementById("handbook-image").src = data.img;
+      document.getElementById("handbook-image").alt = `Backpacking South America Handbook - ${selected}`;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").innerHTML = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const qty = document.getElementById("quantity").value;
+      alert(`${qty} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

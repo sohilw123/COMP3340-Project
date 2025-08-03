@@ -49,19 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/backpacks/JetSet 2-in-1/jetset_15in.jpg" alt="JetSet 2-in-1 15in">
+      <img id="productImage" src="" alt="JetSet Image">
     </div>
 
     <div class="product-info">
-      <h2 id="productPrice">$109.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Select Size:</label>
-      <select id="variant" onchange="updateVariant()">
-        <option value="15in">15-inch</option>
-        <option value="17in">17-inch</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">Maximize flexibility and minimize bulk with the JetSet 2-in-1 Carry-On + Daypack. Designed for travelers who love versatility, this modular system separates into a full-featured carry-on and a sleek daypack that can be worn separately or zipped together.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Combined 42L total storage capacity</li>
@@ -79,10 +76,7 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “This backpack is genius! Used the small pack for city walks and zipped it onto the carry-on for flights.” — Jess K.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “Smart design, light weight. Wish the zippers were a little smoother, but overall amazing product.” — Martin S.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
@@ -90,40 +84,60 @@
   </footer>
 
   <script>
-    const productData = {
-      "15in": {
-        img: "../../images/backpacks/JetSet 2-in-1/jetset_15in.jpg",
-        alt: "JetSet 2-in-1 15in",
-        description: "Compact and carry-on approved. Ideal for travelers who pack light or need a reliable personal item.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “This backpack is genius! Used the small pack for city walks and zipped it onto the carry-on for flights.” — Jess K.",
-          "⭐️⭐️⭐️⭐️ “Smart design, light weight. Wish the zippers were a little smoother, but overall amazing product.” — Martin S."
-        ]
-      },
-      "17in": {
-        img: "../../images/backpacks/JetSet 2-in-1/jetset_17in.jpg",
-        alt: "JetSet 2-in-1 17in",
-        description: "More space for longer trips. Fits larger laptops and comes with an extra interior organizer pocket.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “This bag replaced both my carry-on and daypack. Total game-changer for longer trips.” — Elina V.",
-          "⭐️⭐️⭐️⭐️ “Love the extra room. A bit heavier than expected, but still very comfortable.” — Ron L."
-        ]
+    let variantData = {};
+    const productId = 3; // Assuming JetSet 2-in-1 has ID 3
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/"/g, '').replace(/\s+/g, '').replace(/-/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `JetSet 2-in-1 ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = productData[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -132,6 +146,9 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>
+

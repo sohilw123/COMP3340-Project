@@ -5,72 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>48-Hour Getaways | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const editionSelect = document.getElementById("edition");
-      const img = document.getElementById("guide-image");
-      const price = document.getElementById("price");
-      const desc = document.getElementById("description");
-      const reviews = document.getElementById("reviews");
-
-      const editions = {
-        na: {
-          img: "../../images/travel guides/48 Hour Getaways/48hour-NA.png",
-          price: "$17.95",
-          description:
-            "<em>48-Hour Getaways: North America</em> is your go-to travel guide for unforgettable weekend escapes across the United States and Canada. Maximize your time without compromising adventure.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "Took a quick trip to Montreal using this guide—excellent suggestions and timing tips!",
-              author: "Chris M."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Helped me plan a last-minute adventure to Napa Valley. Very easy to follow.",
-              author: "Danielle T."
-            }
-          ]
-        },
-        eu: {
-          img: "../../images/travel guides/48 Hour Getaways/48hour-EU.png",
-          price: "$19.95",
-          description:
-            "<em>48-Hour Getaways: Europe</em> offers carefully crafted weekend itineraries across iconic European cities. Ideal for spontaneous travelers, couples, or weekend warriors exploring the continent.",
-          reviews: [
-            {
-              rating: "⭐️⭐️⭐️⭐️⭐️",
-              text: "Paris in 48 hours? This book nailed it. Loved the dining and museum recs!",
-              author: "Leo P."
-            },
-            {
-              rating: "⭐️⭐️⭐️⭐️",
-              text: "Used it for a weekend in Prague—super smooth planning and suggestions.",
-              author: "Fatima N."
-            }
-          ]
-        }
-      };
-
-      function updateContent(key) {
-        const data = editions[key];
-        img.src = data.img;
-        price.textContent = data.price;
-        desc.innerHTML = data.description;
-
-        // Clear and render reviews
-        reviews.innerHTML = "";
-        data.reviews.forEach((r) => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${r.rating}</strong> “${r.text}” — ${r.author}</p>`;
-          reviews.appendChild(article);
-        });
-      }
-
-      updateContent(editionSelect.value);
-      editionSelect.addEventListener("change", () => updateContent(editionSelect.value));
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -120,10 +54,7 @@
 
     <div class="product-info">
       <label for="edition"><strong>Select Region:</strong></label>
-      <select id="edition">
-        <option value="na">North America</option>
-        <option value="eu">Europe</option>
-      </select>
+      <select id="edition" onchange="updateEdition()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -150,5 +81,70 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 18; // Update if needed
+    let editionData = {};
+
+    async function fetchVariants() {
+      try {
+        const res = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await res.json();
+
+        if (result.status !== "success") {
+          console.error("Failed to load editions:", result.message);
+          return;
+        }
+
+        const editionSelect = document.getElementById("edition");
+        editionSelect.innerHTML = "";
+
+        result.data.forEach(edition => {
+          const key = edition.variant_name.toLowerCase().replace(/\s+/g, '');
+          editionData[key] = {
+            img: `../../${edition.image}`,
+            price: parseFloat(edition.price).toFixed(2),
+            description: edition.description,
+            reviews: edition.reviews
+          };
+
+          const opt = document.createElement("option");
+          opt.value = key;
+          opt.textContent = edition.variant_name;
+          editionSelect.appendChild(opt);
+        });
+
+        updateEdition(); // Load first
+      } catch (err) {
+        console.error("Error loading variants:", err);
+      }
+    }
+
+    function updateEdition() {
+      const selected = document.getElementById("edition").value;
+      const data = editionData[selected];
+      if (!data) return;
+
+      document.getElementById("guide-image").src = data.img;
+      document.getElementById("guide-image").alt = `48-Hour Getaway Guide - ${selected}`;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").innerHTML = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const qty = parseInt(document.getElementById("quantity").value);
+      alert(`${qty} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

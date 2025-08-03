@@ -5,58 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RFID-Blocking Travel Wallet | GlobeTrotter Store</title>
   <link rel="stylesheet" href="../../styles.css" />
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const variantSelect = document.getElementById("variant");
-      const productImage = document.getElementById("product-image");
-      const price = document.getElementById("price");
-      const description = document.getElementById("description");
-      const reviewsContainer = document.getElementById("reviews");
-
-      const variants = {
-        leather: {
-          img: "../../images/organizers/RFID-Blocking Travel Wallet/travel-wallet-leather.jpg",
-          price: "$24.99",
-          desc: "A stylish RFID-blocking wallet wrapped in genuine leather. Ideal for travelers who value both security and sophistication.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Super sleek and reliable. The leather feels premium and it fits all my travel docs perfectly.", author: "Noah D." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Elegant and secure — finally found something travel-friendly that doesn't look cheap.", author: "Emily F." }
-          ]
-        },
-        metal: {
-          img: "../../images/organizers/RFID-Blocking Travel Wallet/travel-wallet-metal.jpg",
-          price: "$26.99",
-          desc: "A high-tech RFID-blocking wallet with a durable metal core for maximum protection and a futuristic look.",
-          reviews: [
-            { rating: "⭐️⭐️⭐️⭐️⭐️", text: "Absolutely love the metal finish — feels secure and indestructible.", author: "Jordan S." },
-            { rating: "⭐️⭐️⭐️⭐️", text: "Takes a beating and keeps my cards safe. A great choice for frequent flyers.", author: "Maya Z." }
-          ]
-        }
-      };
-
-      function updateContent(selected) {
-        const variant = variants[selected];
-        productImage.src = variant.img;
-        price.textContent = variant.price;
-        description.textContent = variant.desc;
-
-        // Refresh reviews
-        reviewsContainer.innerHTML = "";
-        variant.reviews.forEach(review => {
-          const article = document.createElement("article");
-          article.innerHTML = `<p><strong>${review.rating}</strong> “${review.text}” — ${review.author}</p>`;
-          reviewsContainer.appendChild(article);
-        });
-      }
-
-      // Default selection
-      updateContent(variantSelect.value);
-
-      variantSelect.addEventListener("change", () => {
-        updateContent(variantSelect.value);
-      });
-    });
-  </script>
   <style>
     .product-detail {
       max-width: 1000px;
@@ -106,10 +54,7 @@
 
     <div class="product-info">
       <label for="variant"><strong>Select Style:</strong></label>
-      <select id="variant">
-        <option value="leather">Leather</option>
-        <option value="metal">Metal</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
       <h2 id="price"></h2>
       <p id="description"></p>
@@ -136,5 +81,72 @@
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
+
+  <script>
+    const productId = 16; // Adjust this ID as needed
+    let variantData = {};
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== "success") {
+          console.error("Failed to fetch variant data:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Travel Wallet - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant(); // Load first variant
+      } catch (error) {
+        console.error("Error loading variants:", error);
+      }
+    }
+
+    function updateVariant() {
+      const selected = document.getElementById("variant").value;
+      const data = variantData[selected];
+      if (!data) return;
+
+      document.getElementById("product-image").src = data.img;
+      document.getElementById("product-image").alt = data.alt;
+      document.getElementById("price").textContent = `$${data.price}`;
+      document.getElementById("description").textContent = data.description;
+
+      const reviewsDiv = document.getElementById("reviews");
+      reviewsDiv.innerHTML = "";
+      data.reviews.forEach(review => {
+        const article = document.createElement("article");
+        article.innerHTML = `<p>${review}</p>`;
+        reviewsDiv.appendChild(article);
+      });
+    }
+
+    function addToCart(productId) {
+      const qty = parseInt(document.getElementById("quantity").value);
+      alert(`${qty} of ${productId} added to cart.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
+  </script>
 </body>
 </html>

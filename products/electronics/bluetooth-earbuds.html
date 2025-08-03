@@ -49,19 +49,16 @@
 
   <main class="product-detail">
     <div class="product-display">
-      <img id="productImage" src="../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-black.jpg" alt="Bluetooth Earbuds Black">
+      <img id="productImage" src="" alt="Bluetooth Earbuds Variant">
     </div>
 
     <div class="product-info">
-      <h2>$59.99</h2>
+      <h2 id="productPrice">$0.00</h2>
 
       <label for="variant">Choose Color:</label>
-      <select id="variant" onchange="updateVariant()">
-        <option value="black">Black</option>
-        <option value="white">White</option>
-      </select>
+      <select id="variant" onchange="updateVariant()"></select>
 
-      <p id="description">Experience immersive sound and total peace on your travels with these Noise-Canceling Bluetooth Earbuds. Designed for long flights and busy terminals, these compact earbuds block out noise while delivering premium audio clarity.</p>
+      <p id="description">Loading description...</p>
 
       <ul>
         <li>Active noise cancellation (ANC) technology</li>
@@ -79,51 +76,69 @@
 
   <section class="product-reviews">
     <h3>Customer Reviews</h3>
-    <div id="reviews">
-      <article><p><strong>⭐️⭐️⭐️⭐️⭐️</strong> “Silenced airplane noise and gave amazing bass. Incredible battery life too!” — Jamie T.</p></article>
-      <article><p><strong>⭐️⭐️⭐️⭐️</strong> “They fit great and didn’t fall out while walking around Tokyo. Sound quality is excellent.” — Marcus W.</p></article>
-    </div>
+    <div id="reviews"></div>
   </section>
 
   <footer>
     <p>&copy; 2025 GlobeTrotter Store</p>
   </footer>
 
+  <!-- ✅ Unified dynamic script -->
   <script>
-    const productData = {
-      black: {
-        img: "../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-black.jpg",
-        alt: "Bluetooth Earbuds Black",
-        description: "Experience immersive sound and total peace on your travels with these Noise-Canceling Bluetooth Earbuds. Designed for long flights and busy terminals, these compact earbuds block out noise while delivering premium audio clarity.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “Silenced airplane noise and gave amazing bass. Incredible battery life too!” — Jamie T.",
-          "⭐️⭐️⭐️⭐️ “They fit great and didn’t fall out while walking around Tokyo. Sound quality is excellent.” — Marcus W."
-        ]
-      },
-      white: {
-        img: "../../images/electronics/Bluetooth Earbuds/bluetooth-earbuds-white.jpg",
-        alt: "Bluetooth Earbuds White",
-        description: "Enjoy your audio in style with the white edition. Same advanced ANC performance with a sleek, minimalist design that pairs perfectly with all outfits.",
-        reviews: [
-          "⭐️⭐️⭐️⭐️⭐️ “So clean-looking and they sound amazing. Love the case too.” — Brianna H.",
-          "⭐️⭐️⭐️⭐️ “Used them daily in Rome. The noise cancellation is awesome for street traffic.” — Dario M."
-        ]
+    let variantData = {};
+    const productId = 7; // Update this to match your actual earbuds product ID
+
+    async function fetchVariants() {
+      try {
+        const response = await fetch(`../fetch_variants.php?product_id=${productId}`);
+        const result = await response.json();
+
+        if (result.status !== 'success') {
+          console.error("Failed to load variants:", result.message);
+          return;
+        }
+
+        const dropdown = document.getElementById("variant");
+        dropdown.innerHTML = "";
+
+        result.data.forEach(variant => {
+          const key = variant.variant_name.toLowerCase().replace(/\s+/g, '');
+
+          variantData[key] = {
+            img: `../../${variant.image}`,
+            alt: `Bluetooth Earbuds - ${variant.variant_name}`,
+            price: parseFloat(variant.price).toFixed(2),
+            description: variant.description,
+            reviews: variant.reviews
+          };
+
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = variant.variant_name;
+          dropdown.appendChild(option);
+        });
+
+        updateVariant();
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    };
+    }
 
     function updateVariant() {
       const selected = document.getElementById("variant").value;
-      const data = productData[selected];
+      const data = variantData[selected];
+      if (!data) return;
 
       document.getElementById("productImage").src = data.img;
       document.getElementById("productImage").alt = data.alt;
+      document.getElementById("productPrice").textContent = `$${data.price}`;
       document.getElementById("description").textContent = data.description;
 
       const reviewsDiv = document.getElementById("reviews");
       reviewsDiv.innerHTML = "";
       data.reviews.forEach(review => {
         const article = document.createElement("article");
-        article.innerHTML = `<p><strong>${review.split(" “")[0]}</strong> “${review.split(" “")[1]}`;
+        article.innerHTML = `<p>${review}</p>`;
         reviewsDiv.appendChild(article);
       });
     }
@@ -132,6 +147,8 @@
       const quantity = parseInt(document.getElementById("quantity").value);
       alert(`${quantity} of ${productId} added to cart.`);
     }
+
+    window.addEventListener("DOMContentLoaded", fetchVariants);
   </script>
 </body>
 </html>
